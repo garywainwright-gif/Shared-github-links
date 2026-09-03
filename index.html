@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shared GitHub Links</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --card: #fffdf8;
+      --ink: #1f2933;
+      --muted: #5b6570;
+      --line: #e4ddd0;
+      --accent: #0f6b4c;
+      --accent-soft: #e7f4ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Calibri, system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, #e8f0ea 0, transparent 42%),
+        var(--bg);
+      min-height: 100vh;
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2.25rem 1.25rem 3rem;
+    }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.85rem;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      margin: 0 0 1.5rem;
+      color: var(--muted);
+      max-width: 42rem;
+      line-height: 1.5;
+    }
+    .list-wrap, .setup, .notice {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(40, 32, 20, 0.06);
+    }
+    .setup, .notice {
+      padding: 1.15rem 1.2rem 1.25rem;
+      margin-bottom: 1.15rem;
+    }
+    .setup { display: none; }
+    .setup.visible { display: block; }
+    .setup h2 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+    .setup ol { margin: 0.4rem 0 0; padding-left: 1.2rem; color: var(--muted); line-height: 1.55; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+      margin: 0 0 1.15rem;
+    }
+    button {
+      font: inherit;
+      border: 0;
+      border-radius: 9px;
+      padding: 0.58rem 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .list-wrap { overflow: hidden; margin-bottom: 1.15rem; }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: baseline;
+      padding: 0.95rem 1.15rem 0.4rem;
+    }
+    .toolbar h2 { margin: 0; font-size: 1.05rem; }
+    .count { color: var(--muted); font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      padding: 0.8rem 1.15rem;
+      vertical-align: top;
+      border-top: 1px solid var(--line);
+    }
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    td.date { white-space: nowrap; width: 7.5rem; color: var(--muted); }
+    a { color: var(--accent); font-weight: 650; word-break: break-all; }
+    .empty { padding: 1.4rem 1.15rem 1.6rem; color: var(--muted); }
+    .desc { margin: 0.2rem 0 0; color: var(--ink); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Shared GitHub links</h1>
+    <p class="lede">
+      Open any link below. This list is shared for viewing only — new links are added by the owner in GitHub.
+    </p>
+
+    <section class="setup" id="setup">
+      <h2>One-time GitHub setup</h2>
+      <ol>
+        <li>Create a <strong>public</strong> GitHub repository. A good name is <code>shared-github-links</code>.</li>
+        <li>Upload the files from this folder, including <code>index.html</code> and <code>links.json</code>.</li>
+        <li>Go to Settings → Pages → Deploy from branch → <code>main</code> → <code>/</code> (root) → Save.</li>
+        <li>Share <code>https://YOUR_USERNAME.github.io/shared-github-links/</code>.</li>
+        <li>To add or change links later, edit <code>links.json</code> in that repository.</li>
+      </ol>
+    </section>
+
+    <p class="notice" id="status" hidden></p>
+    <div class="actions">
+      <button type="button" id="refresh-btn">Refresh list</button>
+    </div>
+
+    <section class="list-wrap" data-subject="maths">
+      <div class="toolbar">
+        <h2>Saved links for Maths</h2>
+        <span class="count"></span>
+      </div>
+      <div class="list"></div>
+    </section>
+
+    <section class="list-wrap" data-subject="science">
+      <div class="toolbar">
+        <h2>Saved links for Science</h2>
+        <span class="count"></span>
+      </div>
+      <div class="list"></div>
+    </section>
+
+    <section class="list-wrap" data-subject="english">
+      <div class="toolbar">
+        <h2>Saved links for English</h2>
+        <span class="count"></span>
+      </div>
+      <div class="list"></div>
+    </section>
+
+    <section class="list-wrap" data-subject="economics">
+      <div class="toolbar">
+        <h2>Saved links for Economics</h2>
+        <span class="count"></span>
+      </div>
+      <div class="list"></div>
+    </section>
+
+    <section class="list-wrap" data-subject="general">
+      <div class="toolbar">
+        <h2>Saved links General</h2>
+        <span class="count"></span>
+      </div>
+      <div class="list"></div>
+    </section>
+  </main>
+
+  <script>
+    function detectRepo() {
+      return location.hostname.endsWith(".github.io");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function formatDate(iso) {
+      const [y, m, d] = String(iso || "").split("-");
+      if (!y || !m || !d) return iso || "";
+      return `${d}/${m}/${y}`;
+    }
+
+    function setStatus(message) {
+      const el = document.getElementById("status");
+      if (!message) {
+        el.hidden = true;
+        el.textContent = "";
+        return;
+      }
+      el.hidden = false;
+      el.innerHTML = `<strong>${message}</strong>`;
+    }
+
+    function rowsFor(items) {
+      return items
+        .slice()
+        .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+        .map((item) => `
+          <tr>
+            <td class="date">${escapeHtml(formatDate(item.date))}</td>
+            <td>
+              <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.url)}</a>
+              <p class="desc">${escapeHtml(item.description)}</p>
+            </td>
+          </tr>
+        `)
+        .join("");
+    }
+
+    function render(items) {
+      document.querySelectorAll(".list-wrap[data-subject]").forEach((section) => {
+        const group = items.filter((item) => item.subject === section.dataset.subject);
+        const list = section.querySelector(".list");
+        section.querySelector(".count").textContent = group.length ? `${group.length} saved` : "";
+
+        if (!group.length) {
+          list.innerHTML = '<p class="empty">No links in this section yet.</p>';
+          return;
+        }
+
+        list.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Link and description</th>
+              </tr>
+            </thead>
+            <tbody>${rowsFor(group)}</tbody>
+          </table>
+        `;
+      });
+    }
+
+    async function loadList() {
+      const response = await fetch(`links.json?t=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok) throw new Error("Could not load links.json");
+      const items = await response.json();
+      render(Array.isArray(items) ? items : []);
+    }
+
+    document.getElementById("setup").classList.toggle("visible", !detectRepo());
+
+    document.getElementById("refresh-btn").addEventListener("click", async () => {
+      try {
+        await loadList();
+        setStatus("List refreshed.");
+      } catch {
+        setStatus("The list could not be loaded yet.");
+      }
+    });
+
+    loadList().catch(() => {
+      render([]);
+      if (!detectRepo()) {
+        setStatus("This copy is on your computer. Others can open and use the links after you publish it on GitHub Pages.");
+      }
+    });
+  </script>
+</body>
+</html>
