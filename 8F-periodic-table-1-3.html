@@ -1,0 +1,2217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Year 8 Science · 8F The Periodic Table</title>
+  <style>
+    :root {
+      --ink: #0f2a4a;
+      --muted: #4b5d73;
+      --line: #dfe6f3;
+      --paper: #fff;
+      --bg: #f6f8fb;
+      --formula: #eef6ff;
+      --try: #fff8e8;
+      --check: #eefaf0;
+      --accent: #183a66;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .book { max-width: 920px; margin: 0 auto; padding: 20px 20px 72px; }
+    .cover, .topic {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin: 16px 0;
+    }
+    h1 { margin: 0 0 8px; font-size: 1.75rem; }
+    h2 { margin: 0 0 6px; font-size: 1.2rem; padding-right: 72px; }
+    h3 { margin: 14px 0 6px; font-size: 1rem; }
+    h3 .meta { font-weight: 400; font-size: 0.85rem; }
+    .meta { color: var(--muted); font-size: 0.92rem; }
+    .toolbar {
+      position: sticky; top: 0; z-index: 10;
+      background: #fff; border: 1px solid var(--line); border-radius: 10px;
+      padding: 10px 12px; margin: 12px 0 8px;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .toolbar a, .toolbar button {
+      font-size: 0.85rem; color: var(--accent); text-decoration: none;
+      background: #eaf2ff; border: 1px solid #cfe0ff; border-radius: 6px;
+      padding: 6px 10px; cursor: pointer; font-family: inherit;
+    }
+    .toolbar a.nav-green {
+      background: #dcfce7; border-color: #86efac; color: #166534;
+    }
+    .topic.review-green .must-know .know-head {
+      color: #166534;
+    }
+    .topic.review-green .must-know .know-head:hover,
+    .topic.review-green .must-know .know-item.open .know-head {
+      color: #14532d;
+    }
+    .topic.review-green .must-know li {
+      color: #166534;
+    }
+    .must-know, .try, .answers, .mistakes, .example, .real-world {
+      margin: 10px 0; padding: 12px 16px; border-radius: 8px;
+    }
+    .must-know { background: var(--formula); }
+    .must-know p { margin: 0 0 10px; }
+    .must-know p:last-child { margin-bottom: 0; }
+    .real-world {
+      background: #f4eefc; border: 1px solid #e9d5ff;
+    }
+    .real-world h3 { margin-top: 0; }
+    .real-world .answers { margin: 10px 0 0; }
+    .sort-bank, .sort-drop {
+      display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start;
+      min-height: 48px;
+    }
+    .sort-bank { margin: 8px 0 12px; }
+    .sort-cols {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 12px;
+    }
+    .sort-col {
+      border: 1px dashed #93c5fd; border-radius: 10px; background: #f8fafc;
+      padding: 8px; min-height: 160px;
+    }
+    .sort-col h4 { margin: 0 0 8px; text-align: center; font-size: 0.95rem; }
+    .sort-col.over, .sort-bank.over { background: #eaf2ff; }
+    .sort-card {
+      display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+      cursor: grab; user-select: none;
+      background: #eaf2ff; border: 1px solid #cfe0ff; border-radius: 8px;
+      padding: 8px 10px; color: var(--accent); font-weight: 600; font-size: 0.88rem;
+    }
+    .sort-card:active { cursor: grabbing; }
+    .sort-card.picked { outline: 2px solid var(--accent); }
+    .sort-card.correct { background: #ecfdf3; border-color: #86efac; color: #166534; }
+    .sort-card.wrong { background: #fff1f2; border-color: #fecaca; color: #9f1239; }
+    .sort-card .pt-show { margin: 0; padding: 4px 8px; font-size: 0.75rem; }
+    .write-label {
+      display: block; font-size: 0.85rem; font-weight: 600; color: var(--muted); margin: 8px 0 4px;
+    }
+    .write-box {
+      width: 100%; box-sizing: border-box;
+      font-family: inherit; font-size: 1rem; line-height: 1.45; color: var(--ink);
+      border: 1px solid var(--line); border-radius: 8px;
+      padding: 10px 12px; min-height: 7.5em; resize: vertical;
+      background: #fff;
+    }
+    .write-box:focus {
+      outline: 2px solid var(--accent); outline-offset: 1px;
+    }
+    .write-actions {
+      display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px;
+    }
+    .write-btn {
+      font-family: inherit; cursor: pointer; border-radius: 8px; padding: 6px 10px; margin: 0;
+      border: 1px solid #cfe0ff; background: #eaf2ff; color: var(--accent); font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .sort-feedback.ok { color: #166534; }
+    .sort-check { margin: 0; }
+    @media (max-width: 700px) {
+      .sort-cols { grid-template-columns: 1fr; }
+    }
+    .real-answer-btn, .mistake-explain-btn, .pt-show, .sort-check {
+      font-family: inherit; cursor: pointer; border-radius: 8px; padding: 8px 12px; margin: 8px 0 0;
+      border: 1px solid #cfe0ff; background: #eaf2ff; color: var(--accent); font-weight: 600;
+    }
+    .pt-show-inline {
+      margin: 0 4px; padding: 2px 8px; font-size: 0.78rem; vertical-align: middle;
+    }
+    .mistake-explain { margin-top: 10px; font-size: 0.92rem; }
+    .mistake-explain.hidden { display: none; }
+    .mistake-explain p { margin: 0 0 10px; }
+    .mistake-explain p:last-child { margin-bottom: 0; }
+    .know-head {
+      display: block; flex: 1; width: auto; min-width: 0; text-align: left;
+      font-family: inherit; font-size: 1rem; font-weight: 700;
+      background: transparent; border: 0; border-bottom: 1px solid var(--line);
+      padding: 10px 4px; cursor: pointer; color: var(--ink);
+    }
+    .know-head:hover, .know-item.open .know-head { color: var(--accent); }
+    .know-body { display: none; padding: 8px 4px 12px; }
+    .know-item.open .know-body { display: block; }
+    .know-top { display: flex; align-items: center; gap: 8px; }
+    .hl-btn {
+      display: none; flex-shrink: 0; margin: 0; font-family: inherit; cursor: pointer;
+      font-size: 0.75rem; font-weight: 600; color: #7f1d1d; white-space: nowrap;
+      background: #fee2e2; border: 1px solid #fecaca; border-radius: 6px; padding: 4px 8px;
+    }
+    .topic.review-red .must-know .hl-btn { display: inline-block; }
+    .hl-btn.on { background: #b91c1c; color: #fff; border-color: #991b1b; }
+    .help-card {
+      display: none; background: #fff; border: 1px solid #fecaca; border-radius: 8px;
+      padding: 10px 12px; margin: 0 0 12px; font-size: 0.92rem;
+    }
+    .help-card.open { display: block; }
+    .help-card h4 { margin: 0 0 6px; font-size: 0.95rem; color: #7f1d1d; }
+    .reteach, .move-on {
+      display: none; border-radius: 8px; padding: 10px 12px; margin: 0 0 12px; font-size: 0.92rem;
+    }
+    .topic.review-amber .reteach { display: block; background: #fffbeb; border: 1px solid #fcd34d; }
+    .topic.review-green .move-on { display: block; background: #ecfdf3; border: 1px solid #86efac; }
+    .reteach h4, .move-on h4 { margin: 0 0 6px; font-size: 0.95rem; }
+    #progress-review {
+      position: sticky; bottom: 0; z-index: 30;
+      background: #0f2a4a; color: #fff; border-radius: 12px 12px 0 0;
+      padding: 12px 16px 16px; margin: 20px -4px 0; box-shadow: 0 -4px 16px rgba(15,42,74,0.2);
+    }
+    #progress-review.hidden { display: none; }
+    #progress-review h3 { margin: 0 0 8px; color: #fff; }
+    #progress-review a, #progress-review button.move {
+      color: #fff; background: #1d4e89; border: 1px solid #93c5fd; border-radius: 6px;
+      padding: 4px 8px; font-family: inherit; cursor: pointer; text-decoration: none; font-size: 0.85rem;
+    }
+    .rev-row { margin: 6px 0; font-size: 0.9rem; }
+    .pill { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .pill.green { background: #22c55e; }
+    .pill.amber { background: #f59e0b; }
+    .pill.red { background: #ef4444; }
+    .try { background: var(--try); }
+    .answers { background: var(--check); }
+    .answers.hidden { display: none; }
+    .mistakes { background: #fff1f2; }
+    .example { border-left: 4px solid var(--accent); background: #f8fafc; }
+    .teacher-btn {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; max-width: 420px; margin: 12px 0 4px;
+      padding: 6px; border: 2px solid var(--accent); border-radius: 10px;
+      background: #fff; cursor: pointer; font-family: inherit; text-align: left;
+      color: var(--ink);
+    }
+    .teacher-btn:hover, .teacher-btn:focus-visible { background: #eaf2ff; }
+    .teacher-btn img {
+      width: 88px; height: 88px; object-fit: cover; object-position: 70% 20%;
+      border-radius: 8px; flex-shrink: 0;
+    }
+    .teacher-btn strong { display: block; font-size: 0.95rem; }
+    .teacher-btn span { font-size: 0.82rem; color: var(--muted); }
+    .board-explain { margin-top: 12px; }
+    .board-explain.hidden { display: none; }
+    .stage {
+      background: #fff; border: 1px solid var(--line); border-radius: 8px;
+      padding: 0; margin: 10px 0; overflow: hidden;
+    }
+    .board-explain .know-head { border-bottom: none; padding: 10px 14px; flex: 1; }
+    .board-explain .know-body { padding: 0 14px 12px; }
+    .stage .n {
+      display: inline-block; background: var(--accent); color: #fff;
+      border-radius: 999px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700;
+      margin-right: 6px;
+    }
+    .stage p { margin: 8px 0 0; }
+    .clock-game { margin: 12px 0 14px; }
+    .clock-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px;
+    }
+    .clock-bar button {
+      font-family: inherit; cursor: pointer; border-radius: 8px; padding: 8px 12px;
+      border: 1px solid #cfe0ff; background: #eaf2ff; color: var(--accent); font-weight: 600;
+    }
+    .clock-bar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .clock-bar button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .clock-read {
+      font-variant-numeric: tabular-nums; font-size: 1.35rem; font-weight: 700;
+      min-width: 4.2em;
+    }
+    .clock-read.warn { color: #b45309; }
+    .clock-read.over { color: #b91c1c; }
+    .clock-msg { font-size: 0.9rem; margin: 6px 0 0; min-height: 1.3em; }
+    .coaster-park {
+      position: relative; overflow: hidden; border-radius: 12px;
+      aspect-ratio: 4 / 5; max-height: 420px; background: #87b7e8; margin-top: 8px;
+    }
+    .coaster-park.landscape {
+      aspect-ratio: 16 / 9; max-height: 280px; background: #5b8fc2;
+    }
+    .coaster-park .scene {
+      width: 100%; height: 100%; object-fit: contain; object-position: center;
+      display: block;
+    }
+    .coaster-park .scene.hidden { display: none; }
+    .coaster-park.won .still {
+      animation: car-cheer 0.9s ease-in-out 2;
+    }
+    @keyframes car-cheer {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .coaster-park.won .still { animation: none; }
+    }
+    ul, ol { margin: 6px 0 0; padding-left: 1.25rem; }
+    li { margin: 6px 0; }
+    .mark { color: var(--muted); font-size: 0.82rem; }
+    .topic { position: relative; }
+    .lights {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+      width: 58px;
+    }
+    .lights .signal { position: relative; width: 58px; line-height: 0; }
+    .lights img {
+      width: 58px; height: auto; display: block;
+      pointer-events: none; user-select: none;
+    }
+    .lights .lens {
+      position: absolute; left: 22%; width: 56%; aspect-ratio: 1;
+      border: 0; padding: 0; border-radius: 50%;
+      background: transparent; box-shadow: none; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+    }
+    .lights .lens:focus { outline: none; }
+    .lights .lens-red { top: 6.2%; }
+    .lights .lens-amber { top: 36.6%; }
+    .lights .lens-green { top: 67%; }
+    .lights .lens.on-red {
+      background: radial-gradient(circle at 38% 32%, #fecaca 0%, #ef4444 45%, #991b1b 100%);
+      box-shadow: 0 0 16px 4px rgba(239, 68, 68, 0.75);
+    }
+    .lights .lens.on-amber {
+      background: radial-gradient(circle at 38% 32%, #fde68a 0%, #f59e0b 45%, #b45309 100%);
+      box-shadow: 0 0 16px 4px rgba(245, 158, 11, 0.75);
+    }
+    .lights .lens.on-green {
+      background: radial-gradient(circle at 38% 32%, #bbf7d0 0%, #22c55e 45%, #166534 100%);
+      box-shadow: 0 0 16px 4px rgba(34, 197, 94, 0.75);
+    }
+    .prop-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 8px 0; }
+    .prop-table th, .prop-table td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+    .prop-table th { background: #eef6ff; }
+    .safety {
+      background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px;
+      padding: 10px 12px; margin: 10px 0; font-size: 0.92rem;
+    }
+    .safety strong { color: #9a3412; }
+    .pt-wrap { position: relative; }
+    .pt-wrap h2 { padding-right: 0; }
+    .pt-scroll { overflow-x: auto; padding: 8px 0 16px; }
+    .pt-clouds {
+      position: absolute; inset: 0; pointer-events: none; z-index: 8;
+      overflow: visible;
+    }
+    .pt-arrows {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      overflow: visible;
+    }
+    .pt-cloud {
+      position: absolute;
+      transform: translate(-50%, calc(-100% - 16px));
+      background: #fffef7;
+      border: 2px solid var(--accent);
+      border-radius: 22px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      box-shadow: 0 4px 14px rgba(15, 42, 74, 0.16);
+      max-width: 170px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .pt-cloud::before,
+    .pt-cloud::after {
+      content: "";
+      position: absolute;
+      background: #fffef7;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+    }
+    .pt-cloud::before {
+      width: 12px; height: 12px; left: 46%; bottom: -11px;
+    }
+    .pt-cloud::after {
+      width: 7px; height: 7px; left: 58%; bottom: -18px;
+    }
+    .pt-name {
+      min-height: 1.4em;
+      margin: 0 0 8px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .pt-tip {
+      position: absolute;
+      z-index: 12;
+      transform: translate(-50%, calc(-100% - 8px));
+      background: #0f2a4a;
+      color: #fff;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(15, 42, 74, 0.28);
+    }
+    .pt-tip[hidden] { display: none; }
+    .pt-tip::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      margin-left: -6px;
+      border: 6px solid transparent;
+      border-top-color: #0f2a4a;
+      border-bottom: 0;
+    }
+    .pt {
+      display: grid;
+      grid-template-columns: 18px repeat(18, minmax(32px, 1fr));
+      grid-template-rows: 16px repeat(7, auto) 10px repeat(2, auto);
+      gap: 2px;
+      min-width: 700px;
+    }
+    .pt.pt-focus {
+      grid-template-columns: 28px repeat(3, minmax(88px, 1fr));
+      grid-template-rows: 36px repeat(7, auto);
+      gap: 6px;
+      min-width: 0;
+      max-width: 460px;
+    }
+    .pt-focus .pt-g { font-size: 0.82rem; font-weight: 800; align-items: center; }
+    .pt-focus .pt-el { padding: 6px 4px 8px; }
+    .pt-focus .pt-el .z { font-size: 0.62rem; }
+    .pt-focus .pt-el .sy { font-size: 1.15rem; }
+    .pt-focus .pt-el .nm { display: block; font-size: 0.72rem; font-weight: 600; margin-top: 2px; }
+    .kg-game { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .kg-game h3 { margin-top: 0; }
+    .pt-slot {
+      min-height: 62px; border: 1px dashed #93c5fd; border-radius: 4px;
+      background: #f8fafc; display: flex; align-items: stretch; justify-content: stretch;
+    }
+    .pt-slot.over { background: #eaf2ff; outline: 2px solid var(--accent); }
+    .pt-slot .pt-el { width: 100%; cursor: grab; }
+    .pt-slot.none {
+      background: repeating-linear-gradient(-45deg, #f1f5f9, #f1f5f9 6px, #e2e8f0 6px, #e2e8f0 12px);
+      border-style: solid; border-color: #e2e8f0; pointer-events: none; min-height: 28px;
+    }
+    .kg-bank {
+      display: flex; flex-wrap: wrap; gap: 8px; min-height: 72px;
+      margin: 12px 0; padding: 10px; border: 1px dashed #cfe0ff; border-radius: 10px; background: #fff;
+    }
+    .kg-bank.over { background: #eaf2ff; }
+    .kg-bank .pt-el {
+      width: 88px; cursor: grab; background: #eaf2ff;
+    }
+    .kg-bank .pt-el.picked, .pt-slot .pt-el.picked { outline: 2px solid var(--accent); }
+    .pt-el.kg-right { outline: 2px solid #16a34a; }
+    .pt-hidden #pt-focus, .pt-hidden > .pt-key { display: none; }
+    .pt-hidden .pt-hide-note { display: block; }
+    .pt-hide-note { display: none; margin: 8px 0; font-size: 0.9rem; color: var(--muted); }
+    .pt-g, .pt-p {
+      font-size: 0.62rem; color: var(--muted); font-weight: 700;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .pt-p { align-items: center; justify-content: flex-end; padding-right: 4px; }
+    .pt-el, .pt-mark, .pt-lab {
+      border-radius: 4px; text-align: center; line-height: 1.05;
+      border: 1px solid rgba(15,42,74,0.12);
+    }
+    .pt-el {
+      padding: 2px 1px 3px; cursor: pointer; background: #eef2ff;
+    }
+    .pt-el .z { display: block; font-size: 0.48rem; color: var(--muted); }
+    .pt-el .sy { display: block; font-weight: 800; font-size: 0.78rem; }
+    .pt-el:hover, .pt-el:focus-visible {
+      outline: 2px solid var(--accent); outline-offset: 0; z-index: 1;
+    }
+    .pt.picking .pt-el { opacity: 0.32; }
+    .pt.picking .pt-el.lit {
+      opacity: 1;
+      outline: 3px solid #b45309;
+      box-shadow: 0 0 0 3px #fde68a, 0 0 14px rgba(180, 83, 9, 0.55);
+      z-index: 2;
+      position: relative;
+    }
+    .pt-mark {
+      padding: 6px 2px; font-size: 0.58rem; font-weight: 700;
+      color: #9d174d; background: #fce7f3; display: flex; align-items: center; justify-content: center;
+    }
+    .pt-lab {
+      border: 0; background: transparent; font-size: 0.58rem; color: var(--muted);
+      display: flex; align-items: center; justify-content: flex-end; padding-right: 4px;
+    }
+    .k-h { background: #fef3c7; }
+    .k-a1 { background: #fecaca; }
+    .k-a2 { background: #fed7aa; }
+    .k-tm { background: #c7d2fe; }
+    .k-pm { background: #e2e8f0; }
+    .k-md { background: #d9f99d; }
+    .k-nm { background: #bbf7d0; }
+    .k-hl { background: #a5f3fc; }
+    .k-ng { background: #ddd6fe; }
+    .k-ln { background: #fbcfe8; }
+    .k-ac { background: #f9a8d4; }
+    .pt-key {
+      display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 10px; font-size: 0.78rem;
+    }
+    .pt-key span { display: inline-flex; align-items: center; gap: 6px; }
+    .pt-swatch {
+      width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(15,42,74,0.15);
+    }
+    footer { font-size: 0.88rem; color: var(--muted); margin-top: 20px; }
+    @media print {
+      .toolbar, .lights, .clock-game { display: none !important; }
+      .answers.hidden, .board-explain.hidden, .mistake-explain.hidden { display: block !important; }
+      .know-body { display: block !important; }
+      .know-head { pointer-events: none; border: 0; }
+      .teacher-btn, .real-answer-btn, .mistake-explain-btn, .pt-show, .sort-check, .write-actions, .kg-game { display: none !important; }
+      .write-box { border: 1px solid #ccc; }
+      .topic { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="book">
+  <div class="book">
+    <header class="cover">
+      <p class="meta">Year 8 · Science · BISR KS3 · Exploring Science 8F</p>
+      <h1>8F — The Periodic Table</h1>
+      <p>Atoms and Dalton’s model, how elements are organised, physical and chemical trends, Mendeleev, the modern table, and anomalous results.</p>
+      <p class="meta">Read <strong>Must know</strong>, follow the example, then try the questions before showing answers. When you are confident of your understanding, click the traffic lights in the top right-hand corner.</p>
+    </header>
+
+    <section class="cover pt-wrap" id="periodic-table" aria-label="The modern periodic table">
+      <h2>The modern periodic table</h2>
+      <p>A <strong>group</strong> is a vertical column. Elements in the same group have <strong>similar chemical properties</strong> — they react in similar ways. Group 1 (alkali metals) is on the far left. Group 7 (halogens) and Group 0 (noble gases) are on the far right.</p>
+      <p>A <strong>period</strong> is a horizontal row. As you move left to right across a period, the elements change gradually from metals towards non-metals.</p>
+      <p class="pt-name" id="pt-name">Hover or tap a tile to see the element’s full name and atomic number.</p>
+      <div class="pt-scroll">
+        <div class="pt" id="pt-grid"></div>
+      </div>
+      <div class="pt-tip" id="pt-tip" hidden></div>
+      <div class="pt-clouds" id="pt-clouds" aria-live="polite"></div>
+      <div class="pt-key">
+        <span><i class="pt-swatch k-h"></i> Hydrogen</span>
+        <span><i class="pt-swatch k-a1"></i> Group 1</span>
+        <span><i class="pt-swatch k-a2"></i> Group 2</span>
+        <span><i class="pt-swatch k-tm"></i> Transition metals</span>
+        <span><i class="pt-swatch k-pm"></i> Other metals</span>
+        <span><i class="pt-swatch k-md"></i> Metalloids</span>
+        <span><i class="pt-swatch k-nm"></i> Non-metals</span>
+        <span><i class="pt-swatch k-hl"></i> Group 7</span>
+        <span><i class="pt-swatch k-ng"></i> Group 0</span>
+        <span><i class="pt-swatch k-ln"></i> Lanthanides</span>
+        <span><i class="pt-swatch k-ac"></i> Actinides</span>
+      </div>
+    </section>
+
+    <nav class="toolbar">
+      <a href="index.html">Maths</a>
+      <a href="#atoms">Atoms</a>
+      <a href="#organise">Organisation</a>
+      <a href="#physical">Physical trends</a>
+      <a href="#key-groups">Key groups</a>
+      <a href="8F-periodic-table-4-9.html">Part 2 (sections 4â€“9) â†’</a>
+      <button type="button" id="toggle-answers">Show all answers</button>
+    </nav>
+    <aside id="progress-review" class="hidden" aria-live="polite"></aside>
+    <article class="topic" id="atoms" data-id="atoms">
+      <div class="lights"></div>
+      <h2>1. Atoms, elements and Dalton’s model</h2>
+      <h3>Must know</h3>
+      <div class="must-know fold">
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">All substances are made of atoms.</button>
+          <div class="know-body">
+            <p>An <strong>atom</strong> is the smallest particle of an element that still has the properties of that element. You cannot see atoms with a school microscope — they are far too small. Models (drawings and ideas) help us talk about them.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Elements, compounds and mixtures are not the same.</button>
+          <div class="know-body">
+            <p>An <strong>element</strong> contains only one type of atom (oxygen <button type="button" class="pt-show pt-show-inline" data-pt-show="O" data-pt-clouds="oxygen:O" data-label="Table">Table</button>, iron <button type="button" class="pt-show pt-show-inline" data-pt-show="Fe" data-pt-clouds="iron:Fe" data-label="Table">Table</button>, sodium <button type="button" class="pt-show pt-show-inline" data-pt-show="Na" data-pt-clouds="sodium:Na" data-label="Table">Table</button>).</p>
+            <p>A <strong>compound</strong> contains two or more types of atom <strong>chemically joined</strong> (water H<sub>2</sub>O <button type="button" class="pt-show pt-show-inline" data-pt-show="H,O" data-pt-clouds="water:H,O" data-pt-arrows="1" data-label="Table">Table</button>, sodium chloride NaCl <button type="button" class="pt-show pt-show-inline" data-pt-show="Na,Cl" data-pt-clouds="sodium chloride:Na,Cl" data-pt-arrows="1" data-label="Table">Table</button>).</p>
+            <p>A <strong>mixture</strong> contains substances that are <strong>not</strong> chemically joined (air <button type="button" class="pt-show pt-show-inline" data-pt-show="N,O,Ar" data-pt-clouds="air:N,O,Ar" data-pt-arrows="1" data-label="Table">Table</button>, salt water <button type="button" class="pt-show pt-show-inline" data-pt-show="H,O,Na,Cl" data-pt-clouds="salt water:H,O,Na,Cl" data-pt-arrows="1" data-label="Table">Table</button>, iron filings <button type="button" class="pt-show pt-show-inline" data-pt-show="Fe" data-pt-clouds="iron filings:Fe" data-label="Table">Table</button> and sulfur <button type="button" class="pt-show pt-show-inline" data-pt-show="S" data-pt-clouds="sulfur:S" data-label="Table">Table</button>).</p>
+            <p>You can usually separate a mixture by physical methods; you need a chemical reaction to split a compound.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Dalton’s model treated atoms as tiny solid spheres.</button>
+          <div class="know-body">
+            <p>John Dalton (early 1800s) said: atoms are tiny, solid and indivisible; atoms of one element are identical; atoms of different elements have different masses; compounds form when atoms join in fixed ratios. Think of snooker balls of different sizes stuck together in set recipes.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Dalton did not know about the nucleus or electrons.</button>
+          <div class="know-body">
+            <p>Later scientists showed that atoms have a <strong>nucleus</strong> and <strong>electrons</strong>, and that atoms <em>can</em> be split in nuclear changes. For Year 8 you only need this contrast: Dalton’s spheres were a powerful start, but they are not the modern picture. He also did not know about protons or atomic number.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Elements have symbols; compounds have formulae.</button>
+          <div class="know-body">
+            <p>O is oxygen <button type="button" class="pt-show pt-show-inline" data-pt-show="O" data-pt-clouds="oxygen:O" data-label="Table">Table</button>, Na is sodium <button type="button" class="pt-show pt-show-inline" data-pt-show="Na" data-pt-clouds="sodium:Na" data-label="Table">Table</button>, Fe is iron <button type="button" class="pt-show pt-show-inline" data-pt-show="Fe" data-pt-clouds="iron:Fe" data-label="Table">Table</button>.</p>
+            <p>The second letter of a symbol is always lower case (Co is cobalt <button type="button" class="pt-show pt-show-inline" data-pt-show="Co" data-pt-clouds="cobalt:Co" data-label="Table">Table</button>, CO is carbon monoxide <button type="button" class="pt-show pt-show-inline" data-pt-show="C,O" data-pt-clouds="carbon monoxide:C,O" data-pt-arrows="1" data-label="Table">Table</button> — a different substance).</p>
+            <p>Formulae show the ratio of atoms: H<sub>2</sub>O is two hydrogen atoms joined to one oxygen atom <button type="button" class="pt-show pt-show-inline" data-pt-show="H,O" data-pt-clouds="water (H₂O):H,O" data-pt-arrows="1" data-label="Table">Table</button>.</p>
+          </div>
+        </div>
+      </div>
+      <h3>Worked example</h3>
+      <div class="example">
+        <p><strong>Q.</strong> Sort these into element, compound or mixture:</p>
+        <p class="meta">Drag each card into a column. On a tablet, tap a card, then tap the column.</p>
+        <div class="sort-bank" id="sort-bank">
+          <div class="sort-card" draggable="true" data-id="oxygen-gas" data-answer="element">
+            <span>Oxygen gas (O<sub>2</sub>)</span>
+            <button type="button" class="pt-show" data-pt-show="O" data-pt-clouds="oxygen gas:O" data-pt-arrows="1" data-label="Table">Table</button>
+          </div>
+          <div class="sort-card" draggable="true" data-id="air" data-answer="mixture">
+            <span>Air</span>
+            <button type="button" class="pt-show" data-pt-show="N,O,Ar" data-pt-clouds="air:N,O,Ar" data-pt-arrows="1" data-label="Table">Table</button>
+          </div>
+          <div class="sort-card" draggable="true" data-id="water" data-answer="compound">
+            <span>Water</span>
+            <button type="button" class="pt-show" data-pt-show="H,O" data-pt-clouds="water:H,O" data-pt-arrows="1" data-label="Table">Table</button>
+          </div>
+          <div class="sort-card" draggable="true" data-id="iron" data-answer="element">
+            <span>Iron</span>
+            <button type="button" class="pt-show" data-pt-show="Fe" data-pt-clouds="iron:Fe" data-pt-arrows="1" data-label="Table">Table</button>
+          </div>
+          <div class="sort-card" draggable="true" data-id="salt-water" data-answer="mixture">
+            <span>Salt water</span>
+            <button type="button" class="pt-show" data-pt-show="H,O,Na,Cl" data-pt-clouds="salt water:H,O,Na,Cl" data-pt-arrows="1" data-label="Table">Table</button>
+          </div>
+        </div>
+        <div class="sort-cols">
+          <div class="sort-col" data-col="element">
+            <h4>Element</h4>
+            <div class="sort-drop"></div>
+          </div>
+          <div class="sort-col" data-col="compound">
+            <h4>Compound</h4>
+            <div class="sort-drop"></div>
+          </div>
+          <div class="sort-col" data-col="mixture">
+            <h4>Mixture</h4>
+            <div class="sort-drop"></div>
+          </div>
+        </div>
+        <p class="pt-show-row">
+          <button type="button" class="sort-check" id="sort-check">Check my sort</button>
+          <button type="button" class="sort-check" id="sort-reset">Reset cards</button>
+        </p>
+        <p class="sort-feedback" id="sort-feedback" hidden></p>
+        <p id="dalton-q"><strong>Q.</strong> Write one idea from Dalton’s model that we still use, and one idea that later science changed.</p>
+        <label class="write-label" for="dalton-answer">Your answer</label>
+        <textarea id="dalton-answer" class="write-box" rows="5" placeholder="Idea we still use:&#10;&#10;Idea later science changed:"></textarea>
+        <p class="meta">Try this yourself first. Then tap the teacher to walk through it stage by stage.</p>
+        <button type="button" class="teacher-btn" aria-expanded="false" aria-controls="atoms-board">
+          <img src="teacher-explain.jpg" alt="" width="88" height="88" />
+          <span>
+            <strong>Ask the teacher</strong>
+            <span>Show stage-by-stage explanations for atoms and Dalton</span>
+          </span>
+        </button>
+        <div class="board-explain hidden" id="atoms-board">
+          <div class="stage">
+            <span class="n">Stage 1</span><strong>Ask what is joined, and how</strong>
+            <p>For each substance, ask: is there only one type of atom? If yes, it is an element (even if those atoms are paired, as in O<sub>2</sub>). If there are different atoms chemically joined, it is a compound. If different substances are mixed but not joined, it is a mixture.</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 2</span><strong>Sort the list</strong>
+            <p><strong>Elements:</strong> oxygen gas (only oxygen atoms), iron (only iron atoms).</p>
+            <p><strong>Compound:</strong> water (hydrogen and oxygen chemically joined as H<sub>2</sub>O).</p>
+            <p><strong>Mixtures:</strong> air (nitrogen, oxygen and other gases not joined); salt water (salt mixed with water — you can get the water back by evaporation).</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 3</span><strong>What Dalton got right</strong>
+            <p>We still use: substances are made of atoms; different elements have different atoms; compounds have atoms in fixed ratios (that is why formulae exist).</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 4</span><strong>What later science changed</strong>
+            <p>Atoms are not solid indivisible balls. They have a nucleus and electrons. Atoms of the same element can have different masses (isotopes — stretch for later). Atomic number, not “a unique solid ball”, is what defines the element.</p>
+            <p><strong>Final answers.</strong> Elements: O<sub>2</sub>, iron. Compound: water. Mixtures: air, salt water. Keep: atoms and fixed ratios. Change: atoms are not indivisible solid spheres.</p>
+          </div>
+        </div>
+      </div>
+      <h3>Try this</h3>
+      <div class="try">
+        <div class="clock-game tex2jax_ignore" data-seconds="360" data-gif="coaster-drop.gif"
+          data-wait="The coaster waits at the top until the time is up."
+          data-go="Go! Work through the five questions. Pens down when the coaster drops."
+          data-up="Time’s up — the coaster has gone. Check your answers, then reset if you want another go.">
+          <p class="meta" style="margin-top:0"><strong>Beat the clock.</strong> 6 minutes for these 5 questions. Start when you are ready.</p>
+          <div class="clock-bar">
+            <span class="clock-read" aria-live="polite">6:00</span>
+            <button type="button" class="primary clock-start">Start the ride</button>
+            <button type="button" class="clock-done" disabled>I finished in time</button>
+            <button type="button" class="clock-reset">Reset</button>
+            <button type="button" class="clock-answers">Show all answers</button>
+          </div>
+          <p class="clock-msg">The coaster waits at the top until the time is up.</p>
+          <div class="coaster-park">
+            <img class="scene still" src="coaster-still.png" alt="Roller coaster waiting at the top of the hill" />
+            <img class="scene ride hidden" alt="Roller coaster dropping" />
+          </div>
+        </div>
+        <ol>
+          <li>Define <em>atom</em> and <em>element</em> in one sentence each. <span class="mark">[2]</span></li>
+          <li>Is CO<sub>2</sub> an element, a compound or a mixture? Explain. <span class="mark">[2]</span></li>
+          <li>Write two statements from Dalton’s atomic model. <span class="mark">[2]</span></li>
+          <li>Give one way the modern model of the atom is different from Dalton’s. <span class="mark">[1]</span></li>
+          <li>Why is Co not the same as CO? <span class="mark">[2]</span></li>
+        </ol>
+      </div>
+      <div class="answers hidden">
+        <ol>
+          <li>Atom: the smallest particle of an element. Element: a substance made of only one type of atom.</li>
+          <li>Compound — carbon and oxygen atoms chemically joined in a fixed ratio.</li>
+          <li>Any two of: atoms are tiny / solid / indivisible; atoms of one element are identical; different elements have different atoms (different masses); compounds form when atoms join in fixed ratios.</li>
+          <li>Atoms have a nucleus and electrons / atoms can be split / atoms are not solid indivisible spheres.</li>
+          <li>Co is the symbol for the element cobalt. CO is the formula of the compound carbon monoxide.</li>
+        </ol>
+      </div>
+      <div class="mistakes">
+        <h3>Common mistakes <span class="meta">(Swiping a laptop screen thinking it’s a tablet.)</span></h3>
+        <ul>
+          <li>Calling a compound a mixture.</li>
+          <li>Thinking O<sub>2</sub> is a compound because it has two atoms.</li>
+          <li>Writing Dalton’s atoms with electrons already in them.</li>
+        </ul>
+        <button type="button" class="mistake-explain-btn">Explain the common mistakes</button>
+        <div class="mistake-explain hidden">
+          <p><strong>Compound vs mixture.</strong> In a compound the atoms are chemically joined and you cannot separate them by filtering or evaporating. Salt water is a mixture; sodium chloride is a compound.</p>
+          <p><strong>O<sub>2</sub> is still an element.</strong> Both atoms are oxygen. A compound needs more than one <em>type</em> of atom.</p>
+          <p><strong>Dalton had no electrons.</strong> Electrons and the nucleus come from later models. Do not draw Dalton’s spheres with a nucleus inside unless the question asks you to compare models.</p>
+        </div>
+      </div>
+      <div class="real-world">
+        <h3>In the real world</h3>
+        <p>A sports-drink label lists “H<sub>2</sub>O, sugars, sodium chloride, flavourings”. Which of those are compounds, and which is a mixture overall? <span class="mark">[3]</span></p>
+        <div class="answers hidden">
+          <p>H<sub>2</sub>O, sugars and sodium chloride are compounds. The drink as a whole is a <strong>mixture</strong> of those substances (they are not chemically joined to each other).</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic" id="organise" data-id="organise">
+      <div class="lights"></div>
+      <h2>2. How elements are organised</h2>
+      <h3>Must know</h3>
+      <div class="must-know fold">
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Groups are vertical columns with similar chemistry.</button>
+          <div class="know-body">
+            <p>A <strong>group</strong> is a column <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K,Rb,Cs,Fr" data-pt-clouds="Group 1 (a column):Li,Na,K" data-pt-arrows="1" data-label="Table">Table</button>. Elements in the same group have <strong>similar chemical properties</strong> — they react in similar ways and make similar types of compound. Lithium, sodium and potassium <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K" data-pt-clouds="lithium:Li|sodium:Na|potassium:K" data-label="Table">Table</button> are all in Group 1, so they all react with water to make a hydroxide and hydrogen <button type="button" class="pt-show pt-show-inline" data-pt-show="H,O" data-pt-clouds="hydroxide &amp; hydrogen:H,O" data-pt-arrows="1" data-label="Table">Table</button>.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Periods are horizontal rows.</button>
+          <div class="know-body">
+            <p>A <strong>period</strong> is a row. As you move left to right across a period, you gradually change from metals towards non-metals. Sodium (metal) and chlorine (non-metal) are in the same period (period 3) but different groups, so their chemistry is very different.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Metals sit to the left and centre; non-metals to the right.</button>
+          <div class="know-body">
+            <p>A staircase / zigzag line separates metals from non-metals <button type="button" class="pt-show pt-show-inline" data-pt-show="B,Si,Ge,As,Sb,Te" data-pt-clouds="zigzag line:B,Si,Ge,As,Sb,Te" data-pt-arrows="1" data-label="Table">Table</button>. Hydrogen is a non-metal even though it is shown at the top left <button type="button" class="pt-show pt-show-inline" data-pt-show="H" data-pt-clouds="hydrogen:H" data-label="Table">Table</button>. Metalloids (such as silicon) sit near the staircase.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Learn Group 1, Group 7 and Group 0 by name.</button>
+          <div class="know-body">
+            <p><strong>Group 1</strong> — alkali metals <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K,Rb,Cs,Fr" data-pt-clouds="Group 1 – alkali metals:Li,Na,K,Rb,Cs,Fr" data-pt-arrows="1" data-label="Table">Table</button>. <strong>Group 7</strong> — halogens (sometimes labelled Group 17) <button type="button" class="pt-show pt-show-inline" data-pt-show="F,Cl,Br,I,At" data-pt-clouds="Group 7 – halogens:F,Cl,Br,I,At" data-pt-arrows="1" data-label="Table">Table</button>. <strong>Group 0</strong> (or Group 8) — noble gases <button type="button" class="pt-show pt-show-inline" data-pt-show="He,Ne,Ar,Kr,Xe,Rn" data-pt-clouds="Group 0 – noble gases:He,Ne,Ar,Kr,Xe,Rn" data-pt-arrows="1" data-label="Table">Table</button>. The wide block in the middle is the <strong>transition metals</strong> (iron, copper, gold).</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">The modern table is ordered by atomic number.</button>
+          <div class="know-body">
+            <p><strong>Atomic number</strong> is the number of protons. That number decides which element you have. The table is not a random poster — it is a map: group for similar reactions, period for the gradual metal-to-non-metal change, atomic number for the order.</p>
+          </div>
+        </div>
+      </div>
+      <h3>Worked example</h3>
+      <div class="example">
+        <p><strong>Q.</strong> Sodium is in Group 1 <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K,Rb,Cs,Fr" data-pt-clouds="Group 1:Na" data-label="Table">Table</button>, period 3. Chlorine is in Group 7 <button type="button" class="pt-show pt-show-inline" data-pt-show="F,Cl,Br,I,At,Ts" data-pt-clouds="Group 7:Cl" data-label="Table">Table</button>, period 3. Argon is in Group 0 <button type="button" class="pt-show pt-show-inline" data-pt-show="He,Ne,Ar,Kr,Xe,Rn,Og" data-pt-clouds="Group 0:Ar" data-label="Table">Table</button>, period 3. What does each fact tell you, and why is hydrogen’s position awkward? <button type="button" class="pt-show pt-show-inline" data-pt-show="H" data-pt-clouds="hydrogen:H" data-label="Table">Table</button></p>
+        <p class="meta">Try this yourself first. Then tap the teacher to walk through it stage by stage.</p>
+        <button type="button" class="teacher-btn" aria-expanded="false" aria-controls="organise-board">
+          <img src="teacher-explain.jpg" alt="" width="88" height="88" />
+          <span>
+            <strong>Ask the teacher</strong>
+            <span>Show stage-by-stage explanations for groups and periods</span>
+          </span>
+        </button>
+        <div class="board-explain hidden" id="organise-board">
+          <div class="stage">
+            <span class="n">Stage 1</span><strong>Same period, different groups</strong>
+            <p>Find period 3 first: that is the <strong>third row down</strong>, reading across from left to right. Sodium (Na), chlorine (Cl) and argon (Ar) are all in period 3 <button type="button" class="pt-show pt-show-inline" data-pt-show="Na,Mg,Al,Si,P,S,Cl,Ar" data-pt-clouds="period 3:Na,Cl,Ar" data-label="Table">Table</button>, so they sit on the same row. A period is like a floor in a building: sharing a floor only tells you they are at the same height on the table, not that they behave the same.</p>
+            <p>Across any period the elements <strong>change</strong>. You start on the left with metals and move towards non-metals on the right. So period 3 is a journey, not a family. Sodium is still a metal; chlorine is a reactive non-metal; argon is an unreactive gas. Same row, very different substances.</p>
+            <p>The fact that tells you about <strong>chemistry</strong> is the <strong>group</strong> (the column). Group 1 elements react in similar ways to each other; Group 7 elements do too; Group 0 barely react at all. Sodium, chlorine and argon are in three different groups, so you should expect three different kinds of reaction, even though they share a period.</p>
+            <p>So when a question gives both group and period, split the jobs: <strong>period</strong> = which row / how far the element is across the metal-to-non-metal change; <strong>group</strong> = which family it belongs to and how it is likely to react.</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 2</span><strong>Read each group</strong>
+            <p>Sodium (Group 1 <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K,Rb,Cs,Fr" data-pt-clouds="Group 1:Na" data-label="Table">Table</button>) is a reactive metal: expect alkali-metal behaviour with water. Chlorine (Group 7 <button type="button" class="pt-show pt-show-inline" data-pt-show="F,Cl,Br,I,At,Ts" data-pt-clouds="Group 7:Cl" data-label="Table">Table</button>) is a reactive non-metal halogen. Argon (Group 0 <button type="button" class="pt-show pt-show-inline" data-pt-show="He,Ne,Ar,Kr,Xe,Rn,Og" data-pt-clouds="Group 0:Ar" data-label="Table">Table</button>) is a noble gas: almost no reactions. Across the period you have gone metal → non-metal → unreactive gas.</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 3</span><strong>Hydrogen</strong>
+            <p>Hydrogen is a non-metal gas, but it is often shown above Group 1 because it has some similarities with alkali metals in later (GCSE) models. At Year 8, say: hydrogen is a <strong>non-metal</strong> in an awkward place, not an alkali metal.</p>
+            <p><strong>Final answers.</strong> Sodium, chlorine and argon are all in <strong>period 3</strong> <button type="button" class="pt-show pt-show-inline" data-pt-show="Na,Mg,Al,Si,P,S,Cl,Ar" data-pt-clouds="period 3:Na,Cl,Ar" data-label="Table">Table</button> — they share the same <em>row</em>. That only tells you where they sit on the table. It does <em>not</em> mean they react in the same way, because a period is a metal-to-non-metal change, not a chemical family.</p>
+            <p>The chemistry comes from the <strong>group</strong> (the column). Sodium is Group 1 <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K,Rb,Cs,Fr" data-pt-clouds="Group 1:Na" data-label="Table">Table</button>, so it is an alkali <strong>metal</strong> and you expect it to react with water. Chlorine is Group 7 <button type="button" class="pt-show pt-show-inline" data-pt-show="F,Cl,Br,I,At,Ts" data-pt-clouds="Group 7:Cl" data-label="Table">Table</button>, so it is a <strong>halogen</strong> (a reactive non-metal). Argon is Group 0 <button type="button" class="pt-show pt-show-inline" data-pt-show="He,Ne,Ar,Kr,Xe,Rn,Og" data-pt-clouds="Group 0:Ar" data-label="Table">Table</button>, so it is a <strong>noble gas</strong> and almost does not react.</p>
+            <p>Hydrogen’s position is awkward because it is shown at the <strong>top left</strong>, above Group 1, but it is not an alkali metal. It is a <strong>non-metal</strong> gas. At Year 8, say: hydrogen is in an odd place on the poster; do not treat it as Group 1. <button type="button" class="pt-show pt-show-inline" data-pt-show="H" data-pt-clouds="hydrogen:H" data-label="Table">Table</button></p>
+          </div>
+        </div>
+      </div>
+      <h3>Try this</h3>
+      <div class="try">
+        <div class="clock-game tex2jax_ignore" data-seconds="360" data-gif="weather-change.gif"
+          data-wait="The sky stays fair until the time is up."
+          data-go="Go! Work through the five questions. Pens down when the weather changes."
+          data-up="Time’s up — the weather has changed. Check your answers, then reset if you want another go.">
+          <p class="meta" style="margin-top:0"><strong>Beat the clock.</strong> 6 minutes for these 5 questions.</p>
+          <div class="clock-bar">
+            <span class="clock-read" aria-live="polite">6:00</span>
+            <button type="button" class="primary clock-start">Start the forecast</button>
+            <button type="button" class="clock-done" disabled>I finished in time</button>
+            <button type="button" class="clock-reset">Reset</button>
+            <button type="button" class="clock-answers">Show all answers</button>
+          </div>
+          <p class="clock-msg">The sky stays fair until the time is up.</p>
+          <div class="coaster-park">
+            <img class="scene still" src="weather-still.png" alt="Fair weather before the forecast changes" />
+            <img class="scene ride hidden" alt="The weather changing" />
+          </div>
+        </div>
+        <ol>
+          <li>Are lithium and potassium in the same group or the same period? What does that predict? <button type="button" class="pt-show pt-show-inline" data-pt-show="Li" data-pt-clouds="lithium:Li" data-label="Table">Table</button> <button type="button" class="pt-show pt-show-inline" data-pt-show="K" data-pt-clouds="potassium:K" data-label="Table">Table</button> <span class="mark">[2]</span></li>
+          <li>Name the groups that contain (a) chlorine <button type="button" class="pt-show pt-show-inline" data-pt-show="Cl" data-pt-clouds="chlorine:Cl" data-label="Table">Table</button> (b) neon <button type="button" class="pt-show pt-show-inline" data-pt-show="Ne" data-pt-clouds="neon:Ne" data-label="Table">Table</button> (c) potassium <button type="button" class="pt-show pt-show-inline" data-pt-show="K" data-pt-clouds="potassium:K" data-label="Table">Table</button>. <span class="mark">[3]</span></li>
+          <li>Where are metals and non-metals found on the table? <span class="mark">[2]</span></li>
+          <li>Odd one out: Na, Mg, K. Explain. <span class="mark">[2]</span></li>
+          <li>Why is the periodic table more useful than a simple alphabetical list of elements? <span class="mark">[2]</span></li>
+        </ol>
+      </div>
+      <div class="answers hidden">
+        <ol>
+          <li>Same group (Group 1). They should have similar chemical reactions (e.g. with water).</li>
+          <li>(a) Group 7 / halogens (b) Group 0 / noble gases (c) Group 1 / alkali metals.</li>
+          <li>Metals: left and centre. Non-metals: right (hydrogen is a non-metal at the top left).</li>
+          <li>Mg — it is Group 2, while Na and K are both Group 1 (or: K is in a different period from Na and Mg, but the better odd-one-out is magnesium’s group).</li>
+          <li>It groups similar elements and lets you predict properties and reactions from position, not just names.</li>
+        </ol>
+      </div>
+      <div class="mistakes">
+        <h3>Common mistakes <span class="meta">(Racing a child and pretending to let them win badly.)</span></h3>
+        <ul>
+          <li>Mixing up group (column) and period (row).</li>
+          <li>Thinking hydrogen is an alkali metal.</li>
+          <li>Putting noble gases in Group 7.</li>
+        </ul>
+        <button type="button" class="mistake-explain-btn">Explain the common mistakes</button>
+        <div class="mistake-explain hidden">
+          <p><strong>Group vs period.</strong> Memory hook: a <em>period</em> in a sentence goes across the page; a period on the table also goes across. Groups go down, like a group of friends standing in a line.</p>
+          <p><strong>Hydrogen.</strong> It is a non-metal. Similarities with Group 1 are a GCSE idea, not a reason to call it an alkali metal.</p>
+          <p><strong>Group 0 vs 7.</strong> Group 7 elements are reactive (halogens). Group 0 elements barely react (noble gases). They are neighbours on the table but opposites in reactivity.</p>
+        </div>
+      </div>
+      <div class="real-world">
+        <h3>In the real world</h3>
+        <p>A jeweller needs a metal that does not react easily with air or water. Using only the idea of the periodic table, why is gold a better choice than potassium? <span class="mark">[2]</span></p>
+        <div class="answers hidden">
+          <p>Potassium is a Group 1 alkali metal (very reactive). Gold is a transition metal, much less reactive, so it stays shiny and does not react with water or air in everyday use.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic" id="physical" data-id="physical">
+      <div class="lights"></div>
+      <h2>3. Physical properties and physical trends</h2>
+      <h3>Must know</h3>
+      <div class="must-know fold">
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Physical properties do not make a new substance.</button>
+          <div class="know-body">
+            <p>Things you can measure or observe <strong>without making a new substance</strong> are <strong>physical properties</strong> — for example melting point, boiling point, density, hardness, colour, and whether it conducts electricity. A <strong>chemical property</strong> is about how something reacts — does it burn? Does it fizz in water?</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Metals and non-metals have typical physical properties.</button>
+          <div class="know-body">
+            <p><strong>Metals</strong> are usually shiny, can be bent or hammered into shape (malleable), ring when you hit them (sonorous), and conduct heat and electricity well <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,Fe,Cu,Au" data-pt-clouds="example metals:Li,Na,Fe,Cu,Au" data-pt-arrows="1" data-label="Table">Table</button>. <strong>Non-metals</strong> are usually dull, brittle if solid, and do not conduct electricity (graphite is a famous exception) <button type="button" class="pt-show pt-show-inline" data-pt-show="H,C,N,O,S,Cl" data-pt-clouds="example non-metals:H,C,N,O,S,Cl" data-pt-arrows="1" data-label="Table">Table</button>. Learn the general pattern — there are always a few odd ones out.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">A trend is a pattern as you move down a group.</button>
+          <div class="know-body">
+            <p>A trend is a pattern you spot as you go down a group. For example, melting points in Group 1 go: Li 181 °C → Na 98 °C → K 63 °C → Rb 39 °C — each one is lower. Once you spot the pattern, you can <strong>predict</strong> what the next element will be like.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Group 1: melting point falls down the group.</button>
+          <div class="know-body">
+            <p>The alkali metals are soft and shiny when you cut them. They are stored under oil to stop them reacting with air. As you go down Group 1, the melting point gets <strong>lower</strong>. Lithium melts at 181 °C but caesium melts at only 28 °C. Density mostly goes up — but potassium’s density is lower than sodium’s, a handy anomaly to remember.</p>
+          </div>
+        </div>
+        <div class="know-item">
+          <button type="button" class="know-head" aria-expanded="false">Group 7: melting and boiling points rise down the group.</button>
+          <div class="know-body">
+            <p>As you go down Group 7, melting and boiling points get <strong>higher</strong>. That is why fluorine and chlorine are <strong>gases</strong>, bromine is a <strong>liquid</strong>, and iodine is a <strong>solid</strong> at room temperature. The colours also get darker: pale yellow → green → red-brown → dark grey. Noble gases (Group 0) follow the same idea — boiling points rise going down, but they are all still gases at room temperature.</p>
+          </div>
+        </div>
+      </div>
+      <h3>Worked example</h3>
+      <div class="example">
+        <p><strong>Q.</strong> Use the data in these tables. Describe the trend in Group 1 and estimate the melting point of caesium. Then complete the missing state for Group 7.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:24px;margin:12px 0">
+          <table style="border-collapse:collapse;text-align:center;font-size:0.95rem">
+            <caption style="font-weight:700;margin-bottom:4px">Group 1 — melting points</caption>
+            <tr><th style="border:1px solid #ccc;padding:4px 10px">Element</th><th style="border:1px solid #ccc;padding:4px 10px">Symbol</th><th style="border:1px solid #ccc;padding:4px 10px">Melting point (°C)</th></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Lithium</td><td style="border:1px solid #ccc;padding:4px 10px">Li</td><td style="border:1px solid #ccc;padding:4px 10px">181</td></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Sodium</td><td style="border:1px solid #ccc;padding:4px 10px">Na</td><td style="border:1px solid #ccc;padding:4px 10px">98</td></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Potassium</td><td style="border:1px solid #ccc;padding:4px 10px">K</td><td style="border:1px solid #ccc;padding:4px 10px">63</td></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Rubidium</td><td style="border:1px solid #ccc;padding:4px 10px">Rb</td><td style="border:1px solid #ccc;padding:4px 10px">39</td></tr>
+            <tr style="background:#fff8e1"><td style="border:1px solid #ccc;padding:4px 10px">Caesium</td><td style="border:1px solid #ccc;padding:4px 10px">Cs</td><td style="border:1px solid #ccc;padding:4px 10px"><input type="text" style="width:50px;text-align:center;border:1px dashed #999;border-radius:4px;padding:2px" placeholder="?" aria-label="Estimate caesium melting point"></td></tr>
+          </table>
+          <table style="border-collapse:collapse;text-align:center;font-size:0.95rem">
+            <caption style="font-weight:700;margin-bottom:4px">Group 7 — state at room temperature</caption>
+            <tr><th style="border:1px solid #ccc;padding:4px 10px">Element</th><th style="border:1px solid #ccc;padding:4px 10px">Formula</th><th style="border:1px solid #ccc;padding:4px 10px">Colour</th><th style="border:1px solid #ccc;padding:4px 10px">State</th></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Fluorine</td><td style="border:1px solid #ccc;padding:4px 10px">F<sub>2</sub></td><td style="border:1px solid #ccc;padding:4px 10px">Pale yellow</td><td style="border:1px solid #ccc;padding:4px 10px">Gas</td></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Chlorine</td><td style="border:1px solid #ccc;padding:4px 10px">Cl<sub>2</sub></td><td style="border:1px solid #ccc;padding:4px 10px">Green</td><td style="border:1px solid #ccc;padding:4px 10px">Gas</td></tr>
+            <tr><td style="border:1px solid #ccc;padding:4px 10px">Bromine</td><td style="border:1px solid #ccc;padding:4px 10px">Br<sub>2</sub></td><td style="border:1px solid #ccc;padding:4px 10px">Red-brown</td><td style="border:1px solid #ccc;padding:4px 10px">Liquid</td></tr>
+            <tr style="background:#fff8e1"><td style="border:1px solid #ccc;padding:4px 10px">Iodine</td><td style="border:1px solid #ccc;padding:4px 10px">I<sub>2</sub></td><td style="border:1px solid #ccc;padding:4px 10px">Dark grey</td><td style="border:1px solid #ccc;padding:4px 10px"><input type="text" style="width:60px;text-align:center;border:1px dashed #999;border-radius:4px;padding:2px" placeholder="?" aria-label="State of iodine"></td></tr>
+          </table>
+        </div>
+        <p class="meta">Try this yourself first. Then tap the teacher to walk through it stage by stage.</p>
+        <button type="button" class="teacher-btn" aria-expanded="false" aria-controls="physical-board">
+          <img src="teacher-explain.jpg" alt="" width="88" height="88" />
+          <span>
+            <strong>Ask the teacher</strong>
+            <span>Show stage-by-stage explanations for physical trends</span>
+          </span>
+        </button>
+        <div class="board-explain hidden" id="physical-board">
+          <div class="stage">
+            <span class="n">Stage 1</span><strong>Look down the group, not across</strong>
+            <p>Li, Na, K, Rb are Group 1 in order. The melting points 181 → 98 → 63 → 39 are getting smaller. Trend: melting point <strong>decreases</strong> down Group 1.</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 2</span><strong>Predict caesium</strong>
+            <p>Caesium is below rubidium, so its melting point should be <strong>lower than 39 °C</strong>. A sensible estimate is around 20–30 °C (actual is about 28 °C). Do not invent a number higher than rubidium — that would break the trend.</p>
+          </div>
+          <div class="stage">
+            <span class="n">Stage 3</span><strong>Halogen states</strong>
+            <p>The opposite pattern: boiling points increase down Group 7, so the elements change gas → gas → liquid → solid. F<sub>2</sub> gas, Cl<sub>2</sub> gas, Br<sub>2</sub> liquid, I<sub>2</sub> solid.</p>
+            <p><strong>Final answers.</strong> Group 1 melting point decreases; Cs below 39 °C (about 28 °C). Halogens: gas, gas, liquid, solid.</p>
+          </div>
+        </div>
+      </div>
+      <h3>Try this</h3>
+      <div class="try">
+        <div class="clock-game tex2jax_ignore" data-seconds="420" data-gif="powers-blast.gif"
+          data-wait="The shuttle waits on the pad until the time is up."
+          data-go="Go! Work through the five questions. Pens down when it blasts off."
+          data-up="Time’s up — it has launched. Check your answers, then reset if you want another go.">
+          <p class="meta" style="margin-top:0"><strong>Beat the clock.</strong> 7 minutes for these 5 questions.</p>
+          <div class="clock-bar">
+            <span class="clock-read" aria-live="polite">7:00</span>
+            <button type="button" class="primary clock-start">Start the countdown</button>
+            <button type="button" class="clock-done" disabled>I finished in time</button>
+            <button type="button" class="clock-reset">Reset</button>
+            <button type="button" class="clock-answers">Show all answers</button>
+          </div>
+          <p class="clock-msg">The shuttle waits on the pad until the time is up.</p>
+          <div class="coaster-park">
+            <img class="scene still" src="powers-still.png" alt="Space shuttle waiting on the launch pad" />
+            <img class="scene ride hidden" alt="Launch" />
+          </div>
+        </div>
+        <ol>
+          <li>Sort into physical or chemical properties: melting point; reacts with water; density; displaces bromine. <span class="mark">[2]</span></li>
+          <li>Give two typical physical properties of metals. <span class="mark">[2]</span></li>
+          <li>Describe the trend in melting point down Group 1. <span class="mark">[1]</span></li>
+          <li>Why is bromine a liquid at room temperature, but chlorine a gas? <span class="mark">[2]</span></li>
+          <li>Boiling points of noble gases increase down the group. Predict whether xenon boils at a higher or lower temperature than argon. <span class="mark">[1]</span></li>
+        </ol>
+      </div>
+      <div class="answers hidden">
+        <ol>
+          <li>Physical: melting point, density. Chemical: reacts with water, displaces bromine.</li>
+          <li>Any two of: shiny, sonorous, malleable, ductile, good conductor of heat/electricity, high melting point (typical).
+            <ul>
+              <li><strong>Shiny</strong> — a metal looks bright and reflects light, especially when it is freshly cut or polished. Think of a new coin or aluminium foil.</li>
+              <li><strong>Sonorous</strong> — it makes a ringing sound when you hit it, like a bell, a triangle in music, or a saucepan lid.</li>
+              <li><strong>Malleable</strong> — you can hammer or press it into a new shape without it snapping. That is why metals can be made into coins, foil and car body panels.</li>
+              <li><strong>Ductile</strong> — you can pull it out into a thin wire without it breaking. Copper is used for electrical wiring because it is ductile.</li>
+              <li><strong>Good conductor of heat</strong> — heat travels through it quickly. A metal spoon left in hot soup soon feels hot at the handle. Metals also conduct electricity well, which is why cables are metal inside.</li>
+              <li><strong>High melting point</strong> (typical) — most metals stay solid even when they get very hot, so an iron pan does not melt on the cooker. Group 1 metals are unusual: their melting points are much lower.</li>
+            </ul>
+          </li>
+          <li>Melting point decreases down the group.</li>
+          <li>Boiling point increases down Group 7, so chlorine’s boiling point is below room temperature (gas) and bromine’s is above it (liquid).
+            <table class="prop-table" style="width:auto;text-align:center;margin-top:8px">
+              <caption style="font-weight:700;margin-bottom:4px">Group 7 boiling points <button type="button" class="pt-show pt-show-inline" data-pt-show="F,Cl,Br,I" data-pt-clouds="Group 7:F,Cl,Br,I" data-pt-arrows="1" data-label="Table">Table</button></caption>
+              <tr><th>Element</th><th>Formula</th><th>Boiling point (°C)</th><th>Compared with room temperature (~20 °C)</th><th>State</th></tr>
+              <tr><td>Fluorine</td><td>F<sub>2</sub></td><td>−188</td><td>Far below</td><td>Gas</td></tr>
+              <tr><td>Chlorine</td><td>Cl<sub>2</sub></td><td>−35</td><td>Below</td><td>Gas</td></tr>
+              <tr><td>Bromine</td><td>Br<sub>2</sub></td><td>59</td><td>Above</td><td>Liquid</td></tr>
+              <tr><td>Iodine</td><td>I<sub>2</sub></td><td>184</td><td>Well above</td><td>Solid</td></tr>
+            </table>
+          </li>
+          <li>Higher — xenon is below argon, so higher boiling point.
+            <table class="prop-table" style="width:auto;text-align:center;margin-top:8px">
+              <caption style="font-weight:700;margin-bottom:4px">Noble gas boiling points <button type="button" class="pt-show pt-show-inline" data-pt-show="Ar,Xe" data-pt-clouds="argon:Ar|xenon:Xe" data-label="Table">Table</button></caption>
+              <tr><th>Element</th><th>Symbol</th><th>Boiling point (°C)</th></tr>
+              <tr><td>Argon</td><td>Ar</td><td>−186</td></tr>
+              <tr><td>Xenon</td><td>Xe</td><td>−108</td></tr>
+            </table>
+          </li>
+        </ol>
+      </div>
+      <div class="mistakes">
+        <h3>Common mistakes <span class="meta">(Calling “goes bang in water” a physical property.)</span></h3>
+        <ul>
+          <li>Saying Group 1 melting points increase down the group.</li>
+          <li>Confusing density with reactivity.</li>
+          <li>Thinking all non-metals are gases.</li>
+        </ul>
+        <button type="button" class="mistake-explain-btn">Explain the common mistakes</button>
+        <div class="mistake-explain hidden">
+          <p><strong>Two opposite trends.</strong> Group 1 melting points fall; Group 7 melting/boiling points rise. Learn them as a pair so you do not mix them up.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:24px;margin:12px 0">
+            <table class="prop-table" style="width:auto;text-align:center">
+              <caption style="font-weight:700;margin-bottom:4px">Group 1 — boiling points fall <button type="button" class="pt-show pt-show-inline" data-pt-show="Li,Na,K,Rb,Cs" data-pt-clouds="Group 1:Li,Na,K,Rb,Cs" data-pt-arrows="1" data-label="Table">Table</button></caption>
+              <tr><th>Element</th><th>Symbol</th><th>Boiling point (°C)</th></tr>
+              <tr><td>Lithium</td><td>Li</td><td>1342</td></tr>
+              <tr><td>Sodium</td><td>Na</td><td>883</td></tr>
+              <tr><td>Potassium</td><td>K</td><td>759</td></tr>
+              <tr><td>Rubidium</td><td>Rb</td><td>688</td></tr>
+              <tr><td>Caesium</td><td>Cs</td><td>671</td></tr>
+            </table>
+            <table class="prop-table" style="width:auto;text-align:center">
+              <caption style="font-weight:700;margin-bottom:4px">Group 7 — boiling points rise <button type="button" class="pt-show pt-show-inline" data-pt-show="F,Cl,Br,I" data-pt-clouds="Group 7:F,Cl,Br,I" data-pt-arrows="1" data-label="Table">Table</button></caption>
+              <tr><th>Element</th><th>Formula</th><th>Boiling point (°C)</th><th>State at room temp</th></tr>
+              <tr><td>Fluorine</td><td>F<sub>2</sub></td><td>−188</td><td>Gas</td></tr>
+              <tr><td>Chlorine</td><td>Cl<sub>2</sub></td><td>−35</td><td>Gas</td></tr>
+              <tr><td>Bromine</td><td>Br<sub>2</sub></td><td>59</td><td>Liquid</td></tr>
+              <tr><td>Iodine</td><td>I<sub>2</sub></td><td>184</td><td>Solid</td></tr>
+            </table>
+          </div>
+          <p><strong>Density is physical.</strong> How vigorously something reacts is chemical. Potassium can have a surprising density and still be more reactive than sodium.</p>
+          <p><strong>Iodine is a solid non-metal.</strong> Carbon (graphite/diamond) is a solid non-metal too. State depends on melting/boiling point, not on “non-metal = gas”.</p>
+        </div>
+      </div>
+      <div class="real-world">
+        <h3>In the real world</h3>
+        <p>Chlorine is used to kill microbes in swimming pools. Why is it practical that chlorine is a gas at room temperature, while iodine (used in some antiseptics) is a solid? <span class="mark">[2]</span></p>
+        <div class="answers hidden">
+          <p>Chlorine can be dissolved from a gas into water and spread through a pool. Iodine as a solid is easier to store and put into creams or solutions in small amounts. The different states follow the Group 7 boiling-point trend.</p>
+        </div>
+      </div>
+    </article>
+
+    <section class="cover pt-wrap" id="key-groups" aria-label="Group 1, Group 7 and Group 0">
+      <h2>Revision table — Group 1, Group 7 and Group 0</h2>
+      <p>These are the three groups Year 8 needs by heart. Hydrogen is not shown in Group 1 — it is a non-metal. Helium sits at the top of Group 0 even though there is no halogen or alkali metal in period 1.</p>
+      <div class="pt-scroll">
+        <div class="pt pt-focus" id="pt-focus"></div>
+      </div>
+      <p class="pt-hide-note">The revision table is hidden. Fill the empty columns from memory, then show the table to check.</p>
+      <div class="pt-key">
+        <span><i class="pt-swatch k-a1"></i> Group 1 — alkali metals</span>
+        <span><i class="pt-swatch k-hl"></i> Group 7 — halogens</span>
+        <span><i class="pt-swatch k-ng"></i> Group 0 — noble gases</span>
+      </div>
+
+      <div class="kg-game" id="kg-game">
+        <h3>Game — fill the three columns</h3>
+        <p>Use the table above to learn the pattern, then hide it. Drag each element into its empty slot, or tap a tile and then tap the slot. Period 1 has helium only — Group 1 and Group 7 start in period 2.</p>
+        <p class="pt-show-row">
+          <button type="button" class="sort-check" id="kg-hide">Hide the table above</button>
+          <button type="button" class="sort-check" id="kg-check">Check my places</button>
+          <button type="button" class="sort-check" id="kg-reset">Mix again</button>
+        </p>
+        <p class="sort-feedback" id="kg-feedback" hidden></p>
+        <div class="pt-scroll">
+          <div class="pt pt-focus" id="pt-game"></div>
+        </div>
+        <p class="meta" style="margin-top:12px"><strong>Tiles to place</strong></p>
+        <div class="kg-bank" id="kg-bank"></div>
+      </div>
+    </section>
+
+    <footer>
+      Part 1 of 2 (sections 1â€“3). Continue with <a href="8F-periodic-table-4-9.html">sections 4â€“9</a>. Answers stay hidden until you choose <strong>Show all answers</strong>. Traffic-light choices are stored in this browser only.
+    </footer>
+  </div>
+
+  <script>
+    (function buildPeriodicTable() {
+      const grid = document.getElementById("pt-grid");
+      if (!grid) return;
+      const els = [
+        [1,"H","Hydrogen",1,1,"h"],[2,"He","Helium",1,18,"ng"],
+        [3,"Li","Lithium",2,1,"a1"],[4,"Be","Beryllium",2,2,"a2"],[5,"B","Boron",2,13,"md"],[6,"C","Carbon",2,14,"nm"],[7,"N","Nitrogen",2,15,"nm"],[8,"O","Oxygen",2,16,"nm"],[9,"F","Fluorine",2,17,"hl"],[10,"Ne","Neon",2,18,"ng"],
+        [11,"Na","Sodium",3,1,"a1"],[12,"Mg","Magnesium",3,2,"a2"],[13,"Al","Aluminium",3,13,"pm"],[14,"Si","Silicon",3,14,"md"],[15,"P","Phosphorus",3,15,"nm"],[16,"S","Sulphur",3,16,"nm"],[17,"Cl","Chlorine",3,17,"hl"],[18,"Ar","Argon",3,18,"ng"],
+        [19,"K","Potassium",4,1,"a1"],[20,"Ca","Calcium",4,2,"a2"],[21,"Sc","Scandium",4,3,"tm"],[22,"Ti","Titanium",4,4,"tm"],[23,"V","Vanadium",4,5,"tm"],[24,"Cr","Chromium",4,6,"tm"],[25,"Mn","Manganese",4,7,"tm"],[26,"Fe","Iron",4,8,"tm"],[27,"Co","Cobalt",4,9,"tm"],[28,"Ni","Nickel",4,10,"tm"],[29,"Cu","Copper",4,11,"tm"],[30,"Zn","Zinc",4,12,"tm"],[31,"Ga","Gallium",4,13,"pm"],[32,"Ge","Germanium",4,14,"md"],[33,"As","Arsenic",4,15,"md"],[34,"Se","Selenium",4,16,"nm"],[35,"Br","Bromine",4,17,"hl"],[36,"Kr","Krypton",4,18,"ng"],
+        [37,"Rb","Rubidium",5,1,"a1"],[38,"Sr","Strontium",5,2,"a2"],[39,"Y","Yttrium",5,3,"tm"],[40,"Zr","Zirconium",5,4,"tm"],[41,"Nb","Niobium",5,5,"tm"],[42,"Mo","Molybdenum",5,6,"tm"],[43,"Tc","Technetium",5,7,"tm"],[44,"Ru","Ruthenium",5,8,"tm"],[45,"Rh","Rhodium",5,9,"tm"],[46,"Pd","Palladium",5,10,"tm"],[47,"Ag","Silver",5,11,"tm"],[48,"Cd","Cadmium",5,12,"tm"],[49,"In","Indium",5,13,"pm"],[50,"Sn","Tin",5,14,"pm"],[51,"Sb","Antimony",5,15,"md"],[52,"Te","Tellurium",5,16,"md"],[53,"I","Iodine",5,17,"hl"],[54,"Xe","Xenon",5,18,"ng"],
+        [55,"Cs","Caesium",6,1,"a1"],[56,"Ba","Barium",6,2,"a2"],[72,"Hf","Hafnium",6,4,"tm"],[73,"Ta","Tantalum",6,5,"tm"],[74,"W","Tungsten",6,6,"tm"],[75,"Re","Rhenium",6,7,"tm"],[76,"Os","Osmium",6,8,"tm"],[77,"Ir","Iridium",6,9,"tm"],[78,"Pt","Platinum",6,10,"tm"],[79,"Au","Gold",6,11,"tm"],[80,"Hg","Mercury",6,12,"tm"],[81,"Tl","Thallium",6,13,"pm"],[82,"Pb","Lead",6,14,"pm"],[83,"Bi","Bismuth",6,15,"pm"],[84,"Po","Polonium",6,16,"pm"],[85,"At","Astatine",6,17,"hl"],[86,"Rn","Radon",6,18,"ng"],
+        [87,"Fr","Francium",7,1,"a1"],[88,"Ra","Radium",7,2,"a2"],[104,"Rf","Rutherfordium",7,4,"tm"],[105,"Db","Dubnium",7,5,"tm"],[106,"Sg","Seaborgium",7,6,"tm"],[107,"Bh","Bohrium",7,7,"tm"],[108,"Hs","Hassium",7,8,"tm"],[109,"Mt","Meitnerium",7,9,"tm"],[110,"Ds","Darmstadtium",7,10,"tm"],[111,"Rg","Roentgenium",7,11,"tm"],[112,"Cn","Copernicium",7,12,"tm"],[113,"Nh","Nihonium",7,13,"pm"],[114,"Fl","Flerovium",7,14,"pm"],[115,"Mc","Moscovium",7,15,"pm"],[116,"Lv","Livermorium",7,16,"pm"],[117,"Ts","Tennessine",7,17,"hl"],[118,"Og","Oganesson",7,18,"ng"],
+        [57,"La","Lanthanum",8,3,"ln"],[58,"Ce","Cerium",8,4,"ln"],[59,"Pr","Praseodymium",8,5,"ln"],[60,"Nd","Neodymium",8,6,"ln"],[61,"Pm","Promethium",8,7,"ln"],[62,"Sm","Samarium",8,8,"ln"],[63,"Eu","Europium",8,9,"ln"],[64,"Gd","Gadolinium",8,10,"ln"],[65,"Tb","Terbium",8,11,"ln"],[66,"Dy","Dysprosium",8,12,"ln"],[67,"Ho","Holmium",8,13,"ln"],[68,"Er","Erbium",8,14,"ln"],[69,"Tm","Thulium",8,15,"ln"],[70,"Yb","Ytterbium",8,16,"ln"],[71,"Lu","Lutetium",8,17,"ln"],
+        [89,"Ac","Actinium",9,3,"ac"],[90,"Th","Thorium",9,4,"ac"],[91,"Pa","Protactinium",9,5,"ac"],[92,"U","Uranium",9,6,"ac"],[93,"Np","Neptunium",9,7,"ac"],[94,"Pu","Plutonium",9,8,"ac"],[95,"Am","Americium",9,9,"ac"],[96,"Cm","Curium",9,10,"ac"],[97,"Bk","Berkelium",9,11,"ac"],[98,"Cf","Californium",9,12,"ac"],[99,"Es","Einsteinium",9,13,"ac"],[100,"Fm","Fermium",9,14,"ac"],[101,"Md","Mendelevium",9,15,"ac"],[102,"No","Nobelium",9,16,"ac"],[103,"Lr","Lawrencium",9,17,"ac"]
+      ];
+      const labels = [
+        [1,"Group 1"],[2,"Group 2"],[3,"Group 3"],[4,"Group 4"],[5,"Group 5"],[6,"Group 6"],
+        [7,"Group 7"],[8,"Group 8"],[9,"Group 9"],[10,"Group 10"],[11,"Group 11"],[12,"Group 12"],
+        [13,"Group 13"],[14,"Group 14"],[15,"Group 15"],[16,"Group 16"],[7,"Group 7 — halogens"],[0,"Group 0 — noble gases"]
+      ];
+      labels.forEach((lab, i) => {
+        const d = document.createElement("div");
+        d.className = "pt-g";
+        d.textContent = lab[0];
+        d.title = lab[1];
+        d.style.gridColumn = String(i + 2);
+        d.style.gridRow = "1";
+        grid.appendChild(d);
+      });
+      for (let p = 1; p <= 7; p++) {
+        const d = document.createElement("div");
+        d.className = "pt-p";
+        d.textContent = String(p);
+        d.style.gridColumn = "1";
+        d.style.gridRow = String(p + 1);
+        grid.appendChild(d);
+      }
+      function place(el, col, row, cls, html, title) {
+        el.className = cls;
+        el.style.gridColumn = String(col);
+        el.style.gridRow = String(row);
+        el.innerHTML = html;
+        if (title) {
+          el.title = title;
+          el.setAttribute("aria-label", title);
+        }
+        grid.appendChild(el);
+      }
+      const star6 = document.createElement("div");
+      place(star6, 4, 7, "pt-mark", "57–71", "Lanthanides (see row below)");
+      const star7 = document.createElement("div");
+      place(star7, 4, 8, "pt-mark", "89–103", "Actinides (see row below)");
+      els.forEach(([z, sy, name, p, g, k]) => {
+        const d = document.createElement("div");
+        const row = p <= 7 ? p + 1 : p + 2;
+        const col = g + 1;
+        place(d, col, row, "pt-el k-" + k, "<span class=\"z\">" + z + "</span><span class=\"sy\">" + sy + "</span>", z + " " + name);
+        d.dataset.symbol = sy;
+        d.dataset.name = name;
+        d.dataset.z = String(z);
+        d.tabIndex = 0;
+        d.setAttribute("role", "button");
+      });
+      const labL = document.createElement("div");
+      place(labL, 1, 10, "pt-lab", "La", "");
+      labL.style.gridColumn = "1 / span 3";
+      const labA = document.createElement("div");
+      place(labA, 1, 11, "pt-lab", "Ac", "");
+      labA.style.gridColumn = "1 / span 3";
+
+      const read = document.getElementById("pt-name");
+      const tip = document.getElementById("pt-tip");
+      const wrap = document.getElementById("periodic-table");
+      let sticky = null;
+      function labelFor(el) {
+        return el.dataset.name + " (" + el.dataset.symbol + ") — atomic number " + el.dataset.z;
+      }
+      function placeTip(el) {
+        if (!tip || !wrap || !el) return;
+        const origin = wrap.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        tip.hidden = false;
+        tip.textContent = labelFor(el);
+        tip.style.left = (r.left + r.width / 2 - origin.left) + "px";
+        tip.style.top = (r.top - origin.top) + "px";
+      }
+      function showName(el, pin) {
+        if (!el || !el.dataset.name) return;
+        if (read) read.textContent = labelFor(el);
+        placeTip(el);
+        if (pin) sticky = el;
+      }
+      function hideName() {
+        if (sticky) {
+          if (read) read.textContent = labelFor(sticky);
+          placeTip(sticky);
+          return;
+        }
+        if (read) read.textContent = "Hover or tap a tile to see the element’s full name and atomic number.";
+        if (tip) tip.hidden = true;
+      }
+      grid.querySelectorAll(".pt-el").forEach((el) => {
+        el.addEventListener("pointerenter", () => showName(el, false));
+        el.addEventListener("pointerleave", hideName);
+        el.addEventListener("focus", () => showName(el, false));
+        el.addEventListener("blur", hideName);
+        el.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          if (sticky === el) {
+            sticky = null;
+            hideName();
+          } else {
+            showName(el, true);
+          }
+        });
+        el.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            el.click();
+          }
+        });
+      });
+      document.querySelector(".pt-scroll")?.addEventListener("scroll", () => {
+        if (sticky) placeTip(sticky);
+        else if (tip && !tip.hidden) {
+          const hot = grid.querySelector(".pt-el:hover");
+          if (hot) placeTip(hot);
+        }
+      });
+    })();
+
+    (function buildKeyGroupsTable() {
+      const grid = document.getElementById("pt-focus");
+      if (!grid) return;
+      const els = [
+        [3, "Li", "Lithium", 2, 1, "a1"],
+        [11, "Na", "Sodium", 3, 1, "a1"],
+        [19, "K", "Potassium", 4, 1, "a1"],
+        [37, "Rb", "Rubidium", 5, 1, "a1"],
+        [55, "Cs", "Caesium", 6, 1, "a1"],
+        [87, "Fr", "Francium", 7, 1, "a1"],
+        [9, "F", "Fluorine", 2, 2, "hl"],
+        [17, "Cl", "Chlorine", 3, 2, "hl"],
+        [35, "Br", "Bromine", 4, 2, "hl"],
+        [53, "I", "Iodine", 5, 2, "hl"],
+        [85, "At", "Astatine", 6, 2, "hl"],
+        [2, "He", "Helium", 1, 3, "ng"],
+        [10, "Ne", "Neon", 2, 3, "ng"],
+        [18, "Ar", "Argon", 3, 3, "ng"],
+        [36, "Kr", "Krypton", 4, 3, "ng"],
+        [54, "Xe", "Xenon", 5, 3, "ng"],
+        [86, "Rn", "Radon", 6, 3, "ng"]
+      ];
+      [["1", "Group 1"], ["7", "Group 7"], ["0", "Group 0"]].forEach((lab, i) => {
+        const d = document.createElement("div");
+        d.className = "pt-g";
+        d.innerHTML = "<strong>Group " + lab[0] + "</strong>";
+        d.title = lab[1];
+        d.style.gridColumn = String(i + 2);
+        d.style.gridRow = "1";
+        grid.appendChild(d);
+      });
+      for (let p = 1; p <= 7; p++) {
+        const d = document.createElement("div");
+        d.className = "pt-p";
+        d.textContent = String(p);
+        d.style.gridColumn = "1";
+        d.style.gridRow = String(p + 1);
+        grid.appendChild(d);
+      }
+      els.forEach(([z, sy, name, p, col, k]) => {
+        const d = document.createElement("div");
+        d.className = "pt-el k-" + k;
+        d.style.gridColumn = String(col + 1);
+        d.style.gridRow = String(p + 1);
+        d.dataset.symbol = sy;
+        d.dataset.name = name;
+        d.dataset.z = String(z);
+        d.title = z + " " + name;
+        d.setAttribute("aria-label", z + " " + name);
+        d.tabIndex = 0;
+        d.innerHTML = "<span class=\"z\">" + z + "</span><span class=\"sy\">" + sy + "</span><span class=\"nm\">" + name + "</span>";
+        grid.appendChild(d);
+      });
+    })();
+
+    (function bindKeyGroupsGame() {
+      const grid = document.getElementById("pt-game");
+      const bank = document.getElementById("kg-bank");
+      const feedback = document.getElementById("kg-feedback");
+      const wrap = document.getElementById("key-groups");
+      if (!grid || !bank) return;
+      const els = [
+        [3, "Li", "Lithium", 2, 1, "a1"],
+        [11, "Na", "Sodium", 3, 1, "a1"],
+        [19, "K", "Potassium", 4, 1, "a1"],
+        [37, "Rb", "Rubidium", 5, 1, "a1"],
+        [55, "Cs", "Caesium", 6, 1, "a1"],
+        [87, "Fr", "Francium", 7, 1, "a1"],
+        [9, "F", "Fluorine", 2, 2, "hl"],
+        [17, "Cl", "Chlorine", 3, 2, "hl"],
+        [35, "Br", "Bromine", 4, 2, "hl"],
+        [53, "I", "Iodine", 5, 2, "hl"],
+        [85, "At", "Astatine", 6, 2, "hl"],
+        [2, "He", "Helium", 1, 3, "ng"],
+        [10, "Ne", "Neon", 2, 3, "ng"],
+        [18, "Ar", "Argon", 3, 3, "ng"],
+        [36, "Kr", "Krypton", 4, 3, "ng"],
+        [54, "Xe", "Xenon", 5, 3, "ng"],
+        [86, "Rn", "Radon", 6, 3, "ng"]
+      ];
+      const occupied = new Set(els.map((e) => e[3] + "-" + e[4]));
+      [["1", "Group 1"], ["7", "Group 7"], ["0", "Group 0"]].forEach((lab, i) => {
+        const d = document.createElement("div");
+        d.className = "pt-g";
+        d.innerHTML = "<strong>Group " + lab[0] + "</strong>";
+        d.title = lab[1];
+        d.style.gridColumn = String(i + 2);
+        d.style.gridRow = "1";
+        grid.appendChild(d);
+      });
+      for (let p = 1; p <= 7; p++) {
+        const d = document.createElement("div");
+        d.className = "pt-p";
+        d.textContent = String(p);
+        d.style.gridColumn = "1";
+        d.style.gridRow = String(p + 1);
+        grid.appendChild(d);
+        for (let col = 1; col <= 3; col++) {
+          const slot = document.createElement("div");
+          slot.className = occupied.has(p + "-" + col) ? "pt-slot" : "pt-slot none";
+          slot.dataset.period = String(p);
+          slot.dataset.col = String(col);
+          slot.style.gridColumn = String(col + 1);
+          slot.style.gridRow = String(p + 1);
+          grid.appendChild(slot);
+        }
+      }
+      function makeTile(el) {
+        const [z, sy, name, p, col, k] = el;
+        const d = document.createElement("div");
+        d.className = "pt-el";
+        d.draggable = true;
+        d.dataset.symbol = sy;
+        d.dataset.key = k;
+        d.dataset.period = String(p);
+        d.dataset.col = String(col);
+        d.title = name;
+        d.setAttribute("aria-label", name);
+        d.innerHTML = "<span class=\"z\">" + z + "</span><span class=\"sy\">" + sy + "</span><span class=\"nm\">" + name + "</span>";
+        return d;
+      }
+      function shuffle(list) {
+        const a = list.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const t = a[i]; a[i] = a[j]; a[j] = t;
+        }
+        return a;
+      }
+      let picked = null;
+      let dragging = null;
+      function clearMarks() {
+        grid.querySelectorAll(".pt-el").forEach((t) => t.classList.remove("kg-right", "picked"));
+        bank.querySelectorAll(".pt-el").forEach((t) => t.classList.remove("kg-right", "picked"));
+        if (feedback) {
+          feedback.hidden = true;
+          feedback.textContent = "";
+          feedback.classList.remove("ok");
+        }
+      }
+      function bindTile(tile) {
+        tile.addEventListener("dragstart", (e) => {
+          dragging = tile;
+          picked = null;
+          document.querySelectorAll("#kg-game .pt-el").forEach((t) => t.classList.remove("picked"));
+          e.dataTransfer.setData("text/plain", tile.dataset.symbol);
+          e.dataTransfer.effectAllowed = "move";
+        });
+        tile.addEventListener("click", (e) => {
+          e.stopPropagation();
+          document.querySelectorAll("#kg-game .pt-el").forEach((t) => t.classList.remove("picked"));
+          picked = tile;
+          tile.classList.add("picked");
+        });
+      }
+      function placeIn(slot, tile) {
+        if (!slot || slot.classList.contains("none")) return;
+        const occupant = slot.querySelector(".pt-el");
+        if (occupant && occupant !== tile) bank.appendChild(occupant);
+        slot.appendChild(tile);
+        tile.classList.remove("picked");
+        picked = null;
+        clearMarks();
+      }
+      function fillBank() {
+        bank.innerHTML = "";
+        grid.querySelectorAll(".pt-slot .pt-el").forEach((t) => t.remove());
+        shuffle(els).forEach((el) => {
+          const tile = makeTile(el);
+          bindTile(tile);
+          bank.appendChild(tile);
+        });
+        picked = null;
+        if (feedback) {
+          feedback.hidden = true;
+          feedback.textContent = "";
+          feedback.classList.remove("ok");
+        }
+      }
+      grid.querySelectorAll(".pt-slot").forEach((slot) => {
+        slot.addEventListener("dragover", (e) => {
+          if (slot.classList.contains("none")) return;
+          e.preventDefault();
+          slot.classList.add("over");
+        });
+        slot.addEventListener("dragleave", () => slot.classList.remove("over"));
+        slot.addEventListener("drop", (e) => {
+          e.preventDefault();
+          slot.classList.remove("over");
+          if (dragging) placeIn(slot, dragging);
+          dragging = null;
+        });
+        slot.addEventListener("click", () => {
+          if (picked) placeIn(slot, picked);
+        });
+      });
+      bank.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        bank.classList.add("over");
+      });
+      bank.addEventListener("dragleave", () => bank.classList.remove("over"));
+      bank.addEventListener("drop", (e) => {
+        e.preventDefault();
+        bank.classList.remove("over");
+        if (dragging) {
+          bank.appendChild(dragging);
+          dragging.classList.remove("picked");
+          dragging = null;
+          picked = null;
+          clearMarks();
+        }
+      });
+      document.getElementById("kg-check")?.addEventListener("click", () => {
+        const tiles = [...document.querySelectorAll("#kg-game .pt-el")];
+        let right = 0;
+        tiles.forEach((tile) => {
+          tile.classList.remove("kg-right", "picked");
+          const slot = tile.closest(".pt-slot");
+          const ok = slot && slot.dataset.period === tile.dataset.period && slot.dataset.col === tile.dataset.col;
+          if (ok) {
+            tile.classList.add("kg-right", "k-" + tile.dataset.key);
+            right += 1;
+          } else {
+            tile.className = "pt-el";
+            bank.appendChild(tile);
+          }
+        });
+        picked = null;
+        if (feedback) {
+          feedback.hidden = false;
+          if (right === tiles.length) {
+            feedback.classList.add("ok");
+            feedback.textContent = "Congratulations — you have filled Group 1, Group 7 and Group 0.";
+          } else {
+            feedback.classList.remove("ok");
+            feedback.textContent = right + " of " + tiles.length + " in the right place. The correct tiles stayed. Put the others in again.";
+          }
+        }
+      });
+      document.getElementById("kg-reset")?.addEventListener("click", fillBank);
+      document.getElementById("kg-hide")?.addEventListener("click", () => {
+        const hidden = wrap.classList.toggle("pt-hidden");
+        document.getElementById("kg-hide").textContent = hidden ? "Show the table above" : "Hide the table above";
+      });
+      fillBank();
+    })();
+
+    document.querySelectorAll(".try > ol").forEach((list) => {
+      list.querySelectorAll(":scope > li").forEach((li) => {
+        if (li.querySelector("textarea")) return;
+        const q = document.createElement("div");
+        q.className = "try-q-text";
+        while (li.firstChild) q.appendChild(li.firstChild);
+        const box = document.createElement("textarea");
+        box.className = "write-box try-box";
+        box.rows = 2;
+        box.setAttribute("aria-label", "Your answer");
+        li.appendChild(q);
+        li.appendChild(box);
+      });
+    });
+    document.querySelectorAll(".real-world").forEach((box) => {
+      if (box.querySelector("textarea")) return;
+      const q = box.querySelector(":scope > p");
+      const ta = document.createElement("textarea");
+      ta.className = "write-box try-box";
+      ta.rows = 3;
+      ta.setAttribute("aria-label", "Your answer");
+      if (q) q.after(ta);
+      else box.insertBefore(ta, box.querySelector(".answers"));
+    });
+    document.querySelectorAll("textarea.write-box").forEach((box, i) => {
+      if (!box.id) box.id = "write-box-" + i;
+      if (box.parentElement.querySelector(":scope > .write-actions")) return;
+      const key = "y8-8f-write-" + box.id;
+      try {
+        const saved = localStorage.getItem(key);
+        if (saved !== null) box.value = saved;
+      } catch (err) {}
+      const actions = document.createElement("div");
+      actions.className = "write-actions";
+      const save = document.createElement("button");
+      save.type = "button";
+      save.className = "write-btn";
+      save.textContent = "Save";
+      const clear = document.createElement("button");
+      clear.type = "button";
+      clear.className = "write-btn";
+      clear.textContent = "Clear";
+      save.addEventListener("click", () => {
+        try { localStorage.setItem(key, box.value); } catch (err) {}
+        save.textContent = "Saved";
+        setTimeout(() => { save.textContent = "Save"; }, 1200);
+      });
+      clear.addEventListener("click", () => {
+        box.value = "";
+        try { localStorage.removeItem(key); } catch (err) {}
+      });
+      actions.appendChild(save);
+      actions.appendChild(clear);
+      box.after(actions);
+    });
+
+    function parseClouds(raw) {
+      if (!raw) return [];
+      return raw.split("|").map((part) => {
+        const i = part.indexOf(":");
+        if (i < 0) return null;
+        return { name: part.slice(0, i), symbols: part.slice(i + 1).split(",") };
+      }).filter(Boolean);
+    }
+
+    function drawThoughtClouds(clouds, arrowsOn) {
+      const layer = document.getElementById("pt-clouds");
+      const grid = document.getElementById("pt-grid");
+      const wrap = document.getElementById("periodic-table");
+      if (!layer || !grid || !wrap) return;
+      layer.innerHTML = "";
+      if (!clouds || !clouds.length) return;
+      const origin = wrap.getBoundingClientRect();
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("class", "pt-arrows");
+      svg.setAttribute("aria-hidden", "true");
+      const defs = document.createElementNS(svgNS, "defs");
+      const marker = document.createElementNS(svgNS, "marker");
+      marker.setAttribute("id", "pt-arrowhead");
+      marker.setAttribute("markerWidth", "8");
+      marker.setAttribute("markerHeight", "8");
+      marker.setAttribute("refX", "7");
+      marker.setAttribute("refY", "4");
+      marker.setAttribute("orient", "auto");
+      const tip = document.createElementNS(svgNS, "path");
+      tip.setAttribute("d", "M0,0 L8,4 L0,8 z");
+      tip.setAttribute("fill", "#9a3412");
+      marker.appendChild(tip);
+      defs.appendChild(marker);
+      svg.appendChild(defs);
+      layer.appendChild(svg);
+      clouds.forEach((cloud, i) => {
+        const cells = cloud.symbols.map((s) => grid.querySelector('.pt-el[data-symbol="' + s.trim() + '"]')).filter(Boolean);
+        if (!cells.length) return;
+        let minL = Infinity, minT = Infinity, maxR = 0;
+        const spots = cells.map((c) => {
+          const r = c.getBoundingClientRect();
+          minL = Math.min(minL, r.left);
+          minT = Math.min(minT, r.top);
+          maxR = Math.max(maxR, r.right);
+          return r;
+        });
+        const drawArrows = !!arrowsOn || cells.length > 1;
+        const bubble = document.createElement("div");
+        bubble.className = "pt-cloud" + (drawArrows ? " multi" : "");
+        bubble.textContent = cloud.name;
+        const stagger = (i % 3) - 1;
+        const x = (minL + maxR) / 2 - origin.left + stagger * 22;
+        const y = minT - origin.top - (drawArrows ? 28 : (i % 2) * 10);
+        bubble.style.left = x + "px";
+        bubble.style.top = y + "px";
+        layer.appendChild(bubble);
+        if (drawArrows) {
+          spots.forEach((r) => {
+            const line = document.createElementNS(svgNS, "line");
+            line.setAttribute("x1", String(x));
+            line.setAttribute("y1", String(y));
+            line.setAttribute("x2", String(r.left + r.width / 2 - origin.left));
+            line.setAttribute("y2", String(r.top - origin.top + 4));
+            line.setAttribute("stroke", "#9a3412");
+            line.setAttribute("stroke-width", "2.25");
+            line.setAttribute("stroke-linecap", "round");
+            line.setAttribute("marker-end", "url(#pt-arrowhead)");
+            svg.appendChild(line);
+          });
+        }
+      });
+    }
+
+    function highlightOnTable(symbols, clouds, arrowsOn) {
+      const grid = document.getElementById("pt-grid");
+      const table = document.getElementById("periodic-table");
+      if (!grid) return;
+      const want = new Set((symbols || []).map((s) => s.trim()).filter(Boolean));
+      grid.querySelectorAll(".pt-el").forEach((el) => {
+        el.classList.toggle("lit", want.has(el.dataset.symbol));
+      });
+      grid.classList.toggle("picking", want.size > 0);
+      drawThoughtClouds(want.size ? clouds : [], arrowsOn);
+      if (want.size && table) {
+        table.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(function () { drawThoughtClouds(clouds, arrowsOn); }, 350);
+      }
+    }
+
+    document.querySelectorAll(".pt-show").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const on = btn.getAttribute("aria-pressed") === "true";
+        document.querySelectorAll(".pt-show").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.textContent = b.dataset.label || b.textContent;
+        });
+        if (on) {
+          highlightOnTable([]);
+        } else {
+          btn.setAttribute("aria-pressed", "true");
+          highlightOnTable((btn.dataset.ptShow || "").split(","), parseClouds(btn.dataset.ptClouds), btn.dataset.ptArrows === "1");
+          btn.textContent = "Hide";
+        }
+      });
+    });
+
+    (function bindSort() {
+      const bank = document.getElementById("sort-bank");
+      if (!bank) return;
+      const feedback = document.getElementById("sort-feedback");
+      let dragging = null;
+      let picked = null;
+      function clearMarks() {
+        document.querySelectorAll(".sort-card").forEach((c) => c.classList.remove("correct", "wrong"));
+        if (feedback) {
+          feedback.hidden = true;
+          feedback.textContent = "";
+        }
+      }
+      function dropTarget(zone) {
+        if (zone.classList.contains("sort-bank")) return zone;
+        return zone.querySelector(".sort-drop") || zone;
+      }
+      document.querySelectorAll(".sort-card").forEach((card) => {
+        card.addEventListener("dragstart", (e) => {
+          dragging = card;
+          card.classList.remove("picked");
+          picked = null;
+          e.dataTransfer.setData("text/plain", card.dataset.id || "card");
+          e.dataTransfer.effectAllowed = "move";
+        });
+        card.addEventListener("click", (e) => {
+          if (e.target.closest(".pt-show")) return;
+          document.querySelectorAll(".sort-card").forEach((c) => c.classList.remove("picked"));
+          picked = card;
+          card.classList.add("picked");
+        });
+      });
+      document.querySelectorAll(".sort-col, #sort-bank").forEach((zone) => {
+        zone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          zone.classList.add("over");
+        });
+        zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+        zone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          zone.classList.remove("over");
+          if (dragging) dropTarget(zone).appendChild(dragging);
+          dragging = null;
+          clearMarks();
+        });
+        zone.addEventListener("click", (e) => {
+          if (!picked || e.target.closest(".sort-card")) return;
+          dropTarget(zone).appendChild(picked);
+          picked.classList.remove("picked");
+          picked = null;
+          clearMarks();
+        });
+      });
+      document.getElementById("sort-check")?.addEventListener("click", () => {
+        const cards = [...document.querySelectorAll(".sort-card")];
+        let right = 0;
+        cards.forEach((card) => {
+          const col = card.closest(".sort-col");
+          const ok = col && col.dataset.col === card.dataset.answer;
+          card.classList.remove("correct", "wrong", "picked");
+          if (ok) {
+            card.classList.add("correct");
+            right += 1;
+          } else {
+            bank.appendChild(card);
+          }
+        });
+        picked = null;
+        if (feedback) {
+          feedback.hidden = false;
+          if (right === cards.length) {
+            feedback.classList.add("ok");
+            feedback.textContent = "Congratulations — move on to the next question.";
+            document.getElementById("dalton-q")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            feedback.classList.remove("ok");
+            feedback.textContent = "Not quite. The correct cards have stayed in their columns. Put the others in again, then check.";
+          }
+        }
+      });
+      document.getElementById("sort-reset")?.addEventListener("click", () => {
+        document.querySelectorAll(".sort-card").forEach((card) => {
+          bank.appendChild(card);
+          card.classList.remove("picked", "correct", "wrong");
+        });
+        picked = null;
+        clearMarks();
+        if (feedback) feedback.classList.remove("ok");
+      });
+    })();
+
+    window.addEventListener("resize", function () {
+      const active = document.querySelector(".pt-show[aria-pressed='true']");
+      if (active) drawThoughtClouds(parseClouds(active.dataset.ptClouds), active.dataset.ptArrows === "1");
+    });
+    document.querySelector(".pt-scroll")?.addEventListener("scroll", function () {
+      const active = document.querySelector(".pt-show[aria-pressed='true']");
+      if (active) drawThoughtClouds(parseClouds(active.dataset.ptClouds), active.dataset.ptArrows === "1");
+    });
+
+    window.MathJax = Object.assign(window.MathJax || {}, {
+      options: { ignoreHtmlClass: "tex2jax_ignore|clock-game" }
+    });
+    document.querySelectorAll(".board-explain .stage").forEach((stage) => {
+      const n = stage.querySelector(":scope > .n");
+      const strong = stage.querySelector(":scope > strong");
+      const label = ((n ? n.textContent.trim() + " — " : "") + (strong ? strong.textContent.trim() : "Stage")).trim();
+      const body = document.createElement("div");
+      body.className = "know-body";
+      [...stage.children].forEach((el) => {
+        if (el !== n && el !== strong) body.appendChild(el);
+      });
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "know-head";
+      btn.setAttribute("aria-expanded", "false");
+      btn.textContent = label;
+      stage.innerHTML = "";
+      stage.classList.add("know-item");
+      stage.appendChild(btn);
+      stage.appendChild(body);
+    });
+
+    document.querySelectorAll(".must-know.fold, .board-explain").forEach((box) => {
+      box.querySelectorAll(".know-head").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".know-item");
+          const wasOpen = item.classList.contains("open");
+          box.querySelectorAll(".know-item").forEach((it) => {
+            it.classList.remove("open");
+            const h = it.querySelector(".know-head");
+            if (h) h.setAttribute("aria-expanded", "false");
+          });
+          if (!wasOpen) {
+            item.classList.add("open");
+            btn.setAttribute("aria-expanded", "true");
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll(".teacher-btn").forEach((teacherBtn) => {
+      const board = document.getElementById(teacherBtn.getAttribute("aria-controls"));
+      if (!board) return;
+      teacherBtn.addEventListener("click", () => {
+        const open = board.classList.toggle("hidden") === false;
+        teacherBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        teacherBtn.querySelector("strong").textContent = open ? "Hide the teacher" : "Ask the teacher";
+      });
+    });
+
+    function bindMistakeExplain() {
+      document.querySelectorAll(".mistakes").forEach((box) => {
+        const panel = box.querySelector(".mistake-explain");
+        const btn = box.querySelector(".mistake-explain-btn");
+        if (!panel || !btn) return;
+        btn.setAttribute("aria-expanded", "false");
+        btn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          const opening = panel.classList.contains("hidden");
+          if (opening) {
+            panel.classList.remove("hidden");
+            btn.textContent = "Hide the explanation";
+            btn.setAttribute("aria-expanded", "true");
+            if (window.MathJax && MathJax.typesetPromise) {
+              MathJax.typesetPromise([panel]).catch(() => {});
+            }
+          } else {
+            panel.classList.add("hidden");
+            btn.textContent = "Explain the common mistakes";
+            btn.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+    }
+
+    function bindRealWorldAnswers() {
+      document.querySelectorAll(".real-world").forEach((box) => {
+        const answers = box.querySelector(".answers");
+        if (!answers) return;
+        let btn = box.querySelector(".real-answer-btn");
+        if (!btn) {
+          btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "real-answer-btn";
+          answers.parentNode.insertBefore(btn, answers);
+        }
+        btn.textContent = answers.classList.contains("hidden") ? "Show answer" : "Hide answer";
+        btn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          const show = answers.classList.contains("hidden");
+          answers.classList.toggle("hidden", !show);
+          btn.textContent = show ? "Hide answer" : "Show answer";
+          if (show && window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([answers]).catch(() => {});
+          }
+        });
+      });
+    }
+
+    function topicAnswers(el) {
+      const topic = el.closest(".topic");
+      return topic ? topic.querySelector(".answers") : null;
+    }
+
+    function syncClockAnswerButtons() {
+      document.querySelectorAll(".clock-answers").forEach((b) => {
+        const answers = topicAnswers(b);
+        if (answers) b.textContent = answers.classList.contains("hidden") ? "Show all answers" : "Hide answers";
+      });
+    }
+
+    document.querySelectorAll(".clock-game").forEach((root) => {
+      const LIMIT = Number(root.dataset.seconds) || 360;
+      const GIF = root.dataset.gif;
+      const waitMsg = root.dataset.wait || "";
+      const goMsg = root.dataset.go || "";
+      const upMsg = root.dataset.up || "";
+      const msg = root.querySelector(".clock-msg");
+      const park = root.querySelector(".coaster-park");
+      const startBtn = root.querySelector(".clock-start");
+      const doneBtn = root.querySelector(".clock-done");
+      const resetBtn = root.querySelector(".clock-reset");
+      if (!park || !startBtn) return;
+      const still = park.querySelector(".still");
+      const ride = park.querySelector(".ride");
+      let left = LIMIT;
+      let timer = null;
+      let running = false;
+      let endsAt = 0;
+
+      function format(s) {
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return m + ":" + String(r).padStart(2, "0");
+      }
+
+      function remaining() {
+        if (!running) return left;
+        return Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
+      }
+
+      function paint() {
+        if (running) left = remaining();
+        const display = root.querySelector(".clock-read");
+        if (!display) return;
+        display.textContent = format(left);
+        display.classList.toggle("warn", running && left <= 30 && left > 0);
+        display.classList.toggle("over", left === 0);
+      }
+
+      function stopTimer() {
+        if (timer) clearInterval(timer);
+        timer = null;
+        running = false;
+        root.dataset.running = "";
+      }
+
+      function showStill() {
+        park.classList.remove("dropping", "won");
+        ride.removeAttribute("src");
+        ride.classList.add("hidden");
+        still.classList.remove("hidden");
+      }
+
+      function playGif() {
+        park.classList.remove("won");
+        park.classList.add("dropping");
+        still.classList.add("hidden");
+        ride.classList.remove("hidden");
+        ride.src = GIF + "?t=" + Date.now();
+      }
+
+      function timeUp() {
+        if (!running && left !== 0) return;
+        stopTimer();
+        left = 0;
+        paint();
+        startBtn.disabled = true;
+        doneBtn.disabled = true;
+        msg.textContent = upMsg;
+        playGif();
+      }
+
+      function tick() {
+        paint();
+        if (remaining() <= 0) timeUp();
+      }
+
+      startBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        if (running) return;
+        showStill();
+        running = true;
+        root.dataset.running = "1";
+        endsAt = Date.now() + LIMIT * 1000;
+        left = LIMIT;
+        startBtn.disabled = true;
+        doneBtn.disabled = true;
+        msg.textContent = goMsg;
+        paint();
+        if (timer) clearInterval(timer);
+        timer = setInterval(tick, 250);
+        setTimeout(() => {
+          if (running) doneBtn.disabled = false;
+        }, 400);
+      });
+
+      doneBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        if (!running) return;
+        left = remaining();
+        stopTimer();
+        startBtn.disabled = true;
+        doneBtn.disabled = true;
+        showStill();
+        park.classList.add("won");
+        msg.textContent = "You beat the clock with " + format(left) + " left. Now check your answers.";
+      });
+
+      resetBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        stopTimer();
+        left = LIMIT;
+        showStill();
+        startBtn.disabled = false;
+        doneBtn.disabled = true;
+        msg.textContent = waitMsg;
+        paint();
+      });
+
+      const answersBtn = root.querySelector(".clock-answers");
+      if (answersBtn) {
+        answersBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          const answers = topicAnswers(root);
+          if (!answers) return;
+          const show = answers.classList.contains("hidden");
+          answers.classList.toggle("hidden", !show);
+          answersBtn.textContent = show ? "Hide answers" : "Show all answers";
+          if (show && window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([answers]).catch(() => {});
+          }
+        });
+      }
+
+      paint();
+    });
+
+    bindRealWorldAnswers();
+    bindMistakeExplain();
+
+    const btn = document.getElementById("toggle-answers");
+    btn.addEventListener("click", () => {
+      const anyHidden = document.querySelector(".answers.hidden");
+      document.querySelectorAll(".answers").forEach((el) => {
+        el.classList.toggle("hidden", !anyHidden);
+      });
+      btn.textContent = anyHidden ? "Hide all answers" : "Show all answers";
+      syncClockAnswerButtons();
+      document.querySelectorAll(".real-world").forEach((box) => {
+        const answers = box.querySelector(".answers");
+        const b = box.querySelector(".real-answer-btn");
+        if (answers && b) b.textContent = answers.classList.contains("hidden") ? "Show answer" : "Hide answer";
+      });
+    });
+
+    const STORE = "y8-8f-periodic-lights-1-3";
+    const saved = JSON.parse(localStorage.getItem(STORE) || "{}");
+    const TITLES = {
+      atoms: "Atoms and Dalton",
+      organise: "How elements are organised",
+      physical: "Physical trends",
+      group1: "Group 1 chemistry",
+      group7: "Group 7 and noble gases",
+      mendeleev: "Mendeleev’s table",
+      modern: "The modern table",
+      anomalies: "Trends and anomalies",
+      mixed: "Mixed revision"
+    };
+    const NEXT = {
+      atoms: "organise",
+      organise: "physical",
+      physical: "8F-periodic-table-4-9.html#group1",
+      group1: "group7",
+      group7: "mendeleev",
+      mendeleev: "modern",
+      modern: "anomalies",
+      anomalies: "mixed",
+      mixed: "atoms"
+    };
+    const AMBER = {
+      atoms: "<h4>Let’s go through this again</h4><p>An <strong>element</strong> is one type of atom. A <strong>compound</strong> has different atoms chemically joined. A <strong>mixture</strong> is not chemically joined. Dalton: tiny solid spheres, fixed ratios. He did not include a nucleus or electrons.</p>",
+      organise: "<h4>Let’s go through this again</h4><p><strong>Groups</strong> go down (similar chemistry). <strong>Periods</strong> go across. Metals left/centre, non-metals right. Group 1 alkali metals, Group 7 halogens, Group 0 noble gases. Modern order: atomic number.</p>",
+      physical: "<h4>Let’s go through this again</h4><p>Physical = no new substance. Group 1 melting point <strong>falls</strong> down the group. Group 7 boiling point <strong>rises</strong> (gas, gas, liquid, solid). A trend lets you predict the next element.</p>",
+      group1: "<h4>Let’s go through this again</h4><p>Alkali metal + water → metal hydroxide + hydrogen. Indicator goes blue/purple. Reactivity <strong>increases</strong> down the group. Same products, more vigorous.</p>",
+      group7: "<h4>Let’s go through this again</h4><p>Reactivity <strong>decreases</strong> down Group 7. A more reactive halogen displaces a less reactive one. Noble gases barely react, which is why helium and argon are useful.</p>",
+      mendeleev: "<h4>Let’s go through this again</h4><p>Mass + properties, <strong>gaps</strong>, some swaps (Te/I), predicted missing elements. Gaps were a strength. He did not use atomic number.</p>",
+      modern: "<h4>Let’s go through this again</h4><p>Ordered by <strong>atomic number</strong> (protons). Noble gases added. Groups still mean similar chemistry. Atomic number explains why Te comes before I.</p>",
+      anomalies: "<h4>Let’s go through this again</h4><p>An anomaly does not fit. Repeat, mean, give a reason before ignoring a rogue value. Fair test for reactivity. A model can stay if it still predicts well.</p>",
+      mixed: "<h4>Let’s go through this again</h4><p>Opposite trends: Group 1 more reactive down, Group 7 less. Learn the four word equations. Mendeleev: mass, gaps, predictions. Modern: atomic number. Always hunt for the odd result in a table.</p>"
+    };
+    const HELP = {
+      atoms: [
+        { title: "What an atom is", body: "<p>The smallest particle of an element. Everything you can touch is made of atoms, but they are far too small to see in class.</p><p><strong>Try:</strong> Is a grain of salt one atom? No — it is a huge number of atoms (in a compound).</p>" },
+        { title: "Element, compound, mixture", body: "<p>One type of atom = element (including O<sub>2</sub>). Different atoms joined = compound (H<sub>2</sub>O). Mixed but not joined = mixture (air, salt water).</p><p><strong>Try:</strong> Iron; iron oxide; iron filings mixed with sulfur. Element; compound; mixture.</p>" },
+        { title: "Dalton’s spheres", body: "<p>Tiny, solid, indivisible; one element → identical atoms; compounds in fixed recipes.</p><p><strong>Try:</strong> Which is Dalton: “atoms have electrons” or “atoms join in fixed ratios”? The second.</p>" },
+        { title: "What came later", body: "<p>Nucleus and electrons. Atoms can be split in nuclear changes. Dalton was a starting model, not the final one.</p><p><strong>Try:</strong> Name one thing Dalton’s drawing would not show. (Nucleus / electrons.)</p>" },
+        { title: "Symbols vs formulae", body: "<p>Co = cobalt (element). CO = carbon monoxide (compound). Second letter of a symbol is lower case.</p><p><strong>Try:</strong> Is He an element symbol or a formula of a compound? Element (helium).</p>" }
+      ],
+      organise: [
+        { title: "Groups", body: "<p>Columns. Same group → similar reactions. Li, Na, K all react with water.</p><p><strong>Try:</strong> Same group or not: F and Cl (yes), F and Ne (no).</p>" },
+        { title: "Periods", body: "<p>Rows. Across a period you move from metals towards non-metals.</p><p><strong>Try:</strong> Na and Cl: same period, different group — very different chemistry.</p>" },
+        { title: "Metals and non-metals", body: "<p>Metals left and centre, non-metals right. Hydrogen is a non-metal at the top left.</p><p><strong>Try:</strong> Metal or not: Fe (metal), S (non-metal), H (non-metal).</p>" },
+        { title: "Named groups", body: "<p>1 alkali metals, 7 halogens, 0 noble gases. Middle block: transition metals.</p><p><strong>Try:</strong> Name the group of neon. Group 0.</p>" },
+        { title: "Atomic number order", body: "<p>Proton number decides the element and the modern sequence.</p><p><strong>Try:</strong> True or false: the table is alphabetical. False.</p>" }
+      ],
+      physical: [
+        { title: "Physical vs chemical", body: "<p>Physical: melting, density, state. Chemical: reacts, burns, displaces.</p><p><strong>Try:</strong> Is “fizzes in water” physical or chemical? Chemical.</p>" },
+        { title: "Typical properties", body: "<p>Metals: shiny, malleable, conduct. Non-metals: often dull, brittle, poor conductors (graphite excepted).</p><p><strong>Try:</strong> Why is copper used in wires? Conducts electricity.</p>" },
+        { title: "What a trend is", body: "<p>A pattern down a group or across a period that you can extend to predict.</p><p><strong>Try:</strong> If melting points are 181, 98, 63, predict the next is lower still.</p>" },
+        { title: "Group 1 physical trend", body: "<p>Melting point decreases down the group. Soft metals stored in oil.</p><p><strong>Try:</strong> Is caesium’s melting point higher or lower than rubidium’s? Lower.</p>" },
+        { title: "Group 7 physical trend", body: "<p>Boiling point increases: F<sub>2</sub>/Cl<sub>2</sub> gases, Br<sub>2</sub> liquid, I<sub>2</sub> solid. Darker colours down the group.</p><p><strong>Try:</strong> State of iodine at room temperature? Solid.</p>" }
+      ],
+      group1: [
+        { title: "Similar reactions", body: "<p>Same group → same type of products, different vigour.</p><p><strong>Try:</strong> Will rubidium make a hydroxide with water? Yes.</p>" },
+        { title: "The word equation", body: "<p>metal + water → metal hydroxide + hydrogen. The metal is used up.</p><p><strong>Try:</strong> lithium + water → lithium hydroxide + hydrogen.</p>" },
+        { title: "Observations", body: "<p>Floats, moves, fizzes. Na may melt. K often lilac flame. Indicator blue/purple.</p><p><strong>Try:</strong> What gas is the fizz? Hydrogen.</p>" },
+        { title: "Reactivity trend", body: "<p>Increases down the group: Li &lt; Na &lt; K.</p><p><strong>Try:</strong> Which is more vigorous in water, sodium or potassium? Potassium.</p>" },
+        { title: "Predict the next one", body: "<p>Rubidium: same products, more vigorous than potassium.</p><p><strong>Try:</strong> Word equation for caesium + water? caesium hydroxide + hydrogen.</p>" }
+      ],
+      group7: [
+        { title: "Halogen chemistry", body: "<p>Non-metals that make salts with metals. Similar formulae in the group.</p><p><strong>Try:</strong> sodium + chlorine → sodium chloride.</p>" },
+        { title: "Reactivity falls down the group", body: "<p>F most reactive, then Cl, Br, I.</p><p><strong>Try:</strong> More reactive: chlorine or iodine? Chlorine.</p>" },
+        { title: "Displacement", body: "<p>More reactive halogen kicks out a less reactive one from a solution of its salt. Colour shows the element set free.</p><p><strong>Try:</strong> Chlorine + KBr → KCl + Br<sub>2</sub> (orange/brown).</p>" },
+        { title: "Noble gases", body: "<p>Group 0: almost no reactions under normal conditions.</p><p><strong>Try:</strong> Would you expect neon to fizz in water? No.</p>" },
+        { title: "Uses from being unreactive", body: "<p>He balloons (will not burn). Ar welding/bulbs (protects from oxygen).</p><p><strong>Try:</strong> Why not use hydrogen in party balloons? It burns.</p>" }
+      ],
+      mendeleev: [
+        { title: "Mass and properties", body: "<p>He used atomic mass, but groups had to make chemical sense.</p><p><strong>Try:</strong> Did he use proton number? No.</p>" },
+        { title: "Gaps", body: "<p>Empty spaces for elements not yet found, so the pattern of properties could stay true.</p><p><strong>Try:</strong> Were the gaps a weakness? No — they were predictions.</p>" },
+        { title: "Swaps", body: "<p>Te before I so iodine sits with the halogens, even though iodine is slightly lighter.</p><p><strong>Try:</strong> What did he put first, mass or properties, when they clashed? Properties.</p>" },
+        { title: "Predictions", body: "<p>Eka-silicon ≈ germanium. Matching properties made people trust the table.</p><p><strong>Try:</strong> Why does a successful prediction matter in science? It tests the model.</p>" },
+        { title: "Why it mattered", body: "<p>A tool for prediction, not a list. Groups still used today. Guided discovery.</p><p><strong>Try:</strong> One sentence: he showed that properties of elements are periodic.</p>" }
+      ],
+      modern: [
+        { title: "Atomic number", body: "<p>Number of protons. That is the modern order and the definition of the element.</p><p><strong>Try:</strong> Carbon has atomic number 6. What does 6 count? Protons.</p>" },
+        { title: "Why swaps vanish", body: "<p>Te 52, I 53. Mass looked backwards; proton number does not.</p><p><strong>Try:</strong> Ar 18 then K 19, even though Ar is heavier. Same idea.</p>" },
+        { title: "New additions", body: "<p>Noble gases as Group 0. Extra elements discovered or made later.</p><p><strong>Try:</strong> Did Mendeleev’s first table include helium? No.</p>" },
+        { title: "Better atomic models", body: "<p>Nucleus and electrons came after Dalton. They help explain the table at GCSE.</p><p><strong>Try:</strong> Year 8 need: protons decide the element.</p>" },
+        { title: "What stayed", body: "<p>Groups = similar chemistry. That is Mendeleev’s surviving idea.</p><p><strong>Try:</strong> Name one similarity and one difference in a compare question.</p>" }
+      ],
+      anomalies: [
+        { title: "Repeats and means", body: "<p>Use the values that agree. Mean = total ÷ how many you kept.</p><p><strong>Try:</strong> 10, 11, 10 → mean 10.3 (1 d.p.) or 31/3.</p>" },
+        { title: "Spotting an anomaly", body: "<p>Far from the other repeats, or off the trend line.</p><p><strong>Try:</strong> 97, 98, 64 — which is the anomaly? 64.</p>" },
+        { title: "Causes", body: "<p>Mis-read, wrong units, impure sample, copying error. Give a cause, then decide.</p><p><strong>Try:</strong> Write one cause for a melting point that is 30 °C too low.</p>" },
+        { title: "Fair tests", body: "<p>Same size of metal, same water, same method, or the reactivity comparison is unfair.</p><p><strong>Try:</strong> Why not compare a rice-grain of K with a grape of Na?</p>" },
+        { title: "Models and evidence", body: "<p>Keep a model that still predicts. Check bad data. Mention real exceptions honestly.</p><p><strong>Try:</strong> Why keep Mendeleev’s groups despite Te/I masses? Chemistry still fitted.</p>" }
+      ],
+      mixed: [
+        { title: "Core words", body: "<p>Atom / element / compound / mixture / group / period / atomic number / anomaly.</p><p><strong>Try:</strong> Define group in six words. (Column of similar-chemistry elements.)</p>" },
+        { title: "Opposite trends", body: "<p>Group 1 reactivity up, melting point down. Group 7 reactivity down, boiling point up.</p><p><strong>Try:</strong> Cover the page and recite both.</p>" },
+        { title: "Four equations", body: "<p>Two for water (Na, K), one salt (Na + Cl), one displacement (Cl<sub>2</sub> + KBr).</p><p><strong>Try:</strong> Write all four without looking, then check.</p>" },
+        { title: "Mendeleev in four facts", body: "<p>Mass, gaps, predictions, groups kept. Modern upgrade: atomic number.</p><p><strong>Try:</strong> Time yourself on a six-sentence paragraph.</p>" },
+        { title: "Data in the exam", body: "<p>Find the odd result first, then describe the trend.</p><p><strong>Try:</strong> 181, 98, 63, 220 — which number do you challenge?</p>" }
+      ]
+    };
+
+    function knowNodes(topic) {
+      const box = topic.querySelector(".must-know");
+      if (!box) return [];
+      const items = [...box.querySelectorAll(":scope > .know-item")];
+      if (items.length) return items;
+      const paras = [...box.querySelectorAll(":scope > p")];
+      if (paras.length) return paras;
+      return [...box.querySelectorAll(":scope > ul > li")];
+    }
+
+    function typeset(el) {
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {});
+    }
+
+    document.querySelectorAll(".topic[data-id]").forEach((topic) => {
+      const id = topic.dataset.id;
+      const mk = topic.querySelector(".must-know");
+      if (mk) {
+        const reteach = document.createElement("div");
+        reteach.className = "reteach";
+        reteach.innerHTML = AMBER[id] || "";
+        const move = document.createElement("div");
+        move.className = "move-on";
+        const nxt = NEXT[id];
+        const nxtTitle = TITLES[nxt] || "the next topic";
+        const href = nxt && nxt.indexOf(".html") !== -1 ? nxt : ("#" + nxt);
+        move.innerHTML = "<h4>Move on</h4><p>This traffic light is green — you are secure here.</p><p><a class=\"move\" href=\"" + href + "\">Go to " + nxtTitle + "</a></p>";
+        mk.insertBefore(move, mk.firstChild);
+        mk.insertBefore(reteach, mk.firstChild);
+        knowNodes(topic).forEach((node, i) => {
+          const pack = (HELP[id] || [])[i];
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "hl-btn";
+          btn.textContent = "This is the problem";
+          const card = document.createElement("div");
+          card.className = "help-card";
+          if (pack) card.innerHTML = "<h4>" + pack.title + "</h4>" + pack.body;
+          else card.innerHTML = "<h4>Let’s look at this line</h4><p>Read it slowly and try a small example of your own. Then retry the Try this questions.</p>";
+          btn.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const open = !card.classList.contains("open");
+            topic.querySelectorAll(".help-card").forEach((c) => c.classList.remove("open"));
+            topic.querySelectorAll(".hl-btn").forEach((b) => b.classList.remove("on"));
+            if (open) {
+              card.classList.add("open");
+              btn.classList.add("on");
+              typeset(card);
+            }
+          });
+          const head = node.querySelector(":scope > .know-head");
+          if (head) {
+            const top = document.createElement("div");
+            top.className = "know-top";
+            node.insertBefore(top, head);
+            top.appendChild(head);
+            top.appendChild(btn);
+            node.appendChild(card);
+          } else {
+            node.appendChild(btn);
+            node.appendChild(card);
+          }
+        });
+      }
+
+      const box = topic.querySelector(".lights");
+      if (!box) return;
+      box.innerHTML = "";
+      const signal = document.createElement("div");
+      signal.className = "signal";
+      const img = document.createElement("img");
+      img.src = "traffic-light.jpg";
+      img.alt = "Traffic light for how well you understand this topic";
+      signal.appendChild(img);
+      ["red", "amber", "green"].forEach((colour) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "lens lens-" + colour;
+        b.title = colour === "red" ? "Not yet" : (colour === "amber" ? "Nearly" : "Secure");
+        b.setAttribute("aria-label", b.title);
+        b.addEventListener("click", () => {
+          signal.querySelectorAll(".lens").forEach((x) => {
+            x.classList.remove("on-red", "on-amber", "on-green");
+          });
+          b.classList.add("on-" + colour);
+          saved[id] = colour;
+          localStorage.setItem(STORE, JSON.stringify(saved));
+          reviewProgress();
+        });
+        signal.appendChild(b);
+      });
+      box.appendChild(signal);
+      if (saved[id]) {
+        const lens = signal.querySelector(".lens-" + saved[id]);
+        if (lens) lens.classList.add("on-" + saved[id]);
+      }
+    });
+
+    function paintSectionNav() {
+      document.querySelectorAll(".toolbar a[href^='#']").forEach((a) => {
+        const id = a.getAttribute("href").slice(1);
+        a.classList.toggle("nav-green", saved[id] === "green");
+      });
+    }
+
+    function applyTopicReview() {
+      document.querySelectorAll(".topic[data-id]").forEach((t) => {
+        t.classList.remove("review-red", "review-amber", "review-green");
+        const c = saved[t.dataset.id];
+        if (c) t.classList.add("review-" + c);
+      });
+    }
+
+    function reviewProgress() {
+      paintSectionNav();
+      applyTopicReview();
+      const rated = Object.keys(saved).filter((k) => saved[k] && TITLES[k]);
+      const panel = document.getElementById("progress-review");
+      if (rated.length < 3) {
+        panel.classList.add("hidden");
+        panel.innerHTML = "";
+        return;
+      }
+      const latest = rated.slice(-3);
+      panel.classList.remove("hidden");
+      const colours = latest.map((id) => saved[id]);
+      const allGreen = colours.every((c) => c === "green");
+      let html = "<h3>Traffic-light review</h3>";
+      if (allGreen) {
+        html += "<p>All three of these are green. You are ready to move on. Use each green section’s <strong>Move on</strong> link, or keep going down the page.</p>";
+      } else {
+        html += "<p>You have rated three topics. Green: move on. Amber: read the extra explanation at the top of Must know. Red: click <strong>This is the problem</strong> next to the line that is stuck, then use the extra example.</p>";
+      }
+      latest.forEach((id) => {
+        const c = saved[id];
+        html += "<div class=\"rev-row\"><span class=\"pill " + c + "\"></span><a href=\"#" + id + "\">" + TITLES[id] + "</a> — ";
+        if (c === "green") html += "secure, move on.";
+        if (c === "amber") html += "nearly: the Must know has been explained again.";
+        if (c === "red") html += "not yet: highlight the problem line in Must know.";
+        html += "</div>";
+        const topic = document.querySelector(".topic[data-id=\"" + id + "\"]");
+        if (topic) topic.classList.add("review-" + c);
+      });
+      panel.innerHTML = html;
+      latest.forEach((id) => {
+        const topic = document.querySelector(".topic[data-id=\"" + id + "\"]");
+        if (topic) typeset(topic.querySelector(".reteach"));
+      });
+      if (!document.querySelector(".clock-game[data-running='1']")) {
+        panel.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }
+    paintSectionNav();
+    applyTopicReview();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>
+</html>
